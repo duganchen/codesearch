@@ -28,7 +28,7 @@ jQuery ->
             return
 
         populate = (data) ->
-            display_url = jQuery("display_url").text()
+            display_url = jQuery("display-url").text()
             jQuery("ul").empty()
             for filename in data
                 li = "<li class=\"list-group-item\"><a href=\"#{display_url}?f=#{filename}\">#{filename}</a></li>"
