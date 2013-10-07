@@ -1,4 +1,25 @@
 jQuery ->
+
+    basename = (path) ->
+        splits = path.split('/')
+        length = splits.length
+        splits[splits.length - 1]
+
+    $("ul").on "click", "a", (event) ->
+        $('#myModal').modal(show=true)
+
+        href = $(event.target).attr "href"
+        url = "#{href}&ajax=1"
+
+        event.preventDefault()
+
+        $.get url, null, (data) ->
+            $(".modal-title").text basename href
+            $("#link").attr "href", url
+            $('.modal-body').html(data)
+            $('#myModal').modal(show=true)
+
+
     search = (event) ->
         term = escape jQuery.trim $(event.target).val()
 

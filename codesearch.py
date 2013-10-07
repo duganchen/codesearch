@@ -41,6 +41,7 @@ def search():
 @app.route('/display')
 def display():
     filename = flask.request.args.get('f').strip()
+
     lexer = get_lexer_for_filename(filename)
     formatter = HtmlFormatter(noclasses=True)
     code = ''
@@ -48,10 +49,13 @@ def display():
         code = f.read()
     result = highlight(code, lexer, formatter)
 
+    ajax = flask.request.args.get('ajax')
+    if ajax is not None:
+        return flask.Response(result)
+
     return flask.render_template('display.html',
                                  filename=os.path.basename(filename),
                                  code=result)
-
 
 if __name__ == '__main__':
     main()
