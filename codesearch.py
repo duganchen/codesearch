@@ -55,7 +55,7 @@ def display():
 
     return flask.render_template('display.html',
                                  filename=os.path.basename(filename),
-                                 code=result)
+                                 path=filename, code=result)
 
 if __name__ == '__main__':
     main()
