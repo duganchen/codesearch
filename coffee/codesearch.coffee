@@ -15,7 +15,7 @@ jQuery ->
 
         $.get url, null, (data) ->
             $(".modal-title").text basename href
-            $("#link").attr "href", url
+            $("#link").attr "href", href
             $('.modal-body').html(data)
             $('#myModal').modal(show=true)
 
