@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import fnmatch
 import os
 from xml.etree import ElementTree
@@ -8,10 +9,14 @@ import re
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('docdir')
+    args = parser.parse_args()
+
     # http://stackoverflow.com/a/16865106/240515
     signal(SIGPIPE, SIG_DFL)
 
-    docdir = os.path.expanduser('~dugan/Documents')
+    docdir = os.path.expanduser(args.docdir)
     xml = get_xml(docdir)
     print_xml(xml)
 
