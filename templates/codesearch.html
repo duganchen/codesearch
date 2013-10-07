@@ -27,6 +27,8 @@
 	    </div><!-- /.modal-dialog -->
 	  </div><!-- /.modal -->
 
+	  <!-- AJAX URL. For our JavaScript to use. -->
+	  <div class="hidden" id="search-url">{{ url_for('search') }}</div>
 {% endblock %}
 
 {% block js %}<script src="{{ url_for('static', filename='codesearch.js') }}"></script>{%endblock %}

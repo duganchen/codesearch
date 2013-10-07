@@ -33,7 +33,8 @@ jQuery ->
                 li = "<li class=\"list-group-item\"><a href=\"/display?f=#{filename}\">#{filename}</a></li>"
                 jQuery("ul").append li
 
-        jQuery.getJSON "search?q=#{term}", null, populate
+        search_url = jQuery('#search-url').text()
+        jQuery.getJSON "#{search_url}?q=#{term}", null, populate
 
     jQuery('input[type="search"]').keyup search
     jQuery('input[type="search"]').change search
