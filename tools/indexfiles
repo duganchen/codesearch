@@ -1,0 +1,83 @@
+#!/usr/bin/env python
+
+import fnmatch
+import os
+from xml.etree import ElementTree
+from signal import signal, SIGPIPE, SIG_DFL
+import re
+
+
+def main():
+    # http://stackoverflow.com/a/16865106/240515
+    signal(SIGPIPE, SIG_DFL)
+
+    docdir = os.path.expanduser('~dugan/Documents')
+    xml = get_xml(docdir)
+    print_xml(xml)
+
+
+def print_xml(xml):
+    print '<?xml version="1.0" encoding="utf-8"?>'
+    print ElementTree.tostring(xml, encoding='utf-8')
+
+
+def get_xml(docdir):
+    docset = ElementTree.Element('sphinx:docset')
+
+    schema = ElementTree.SubElement(docset, 'sphinx:schema')
+    path = ElementTree.SubElement(schema, 'sphinx:attr', name='path',
+                                  type='string')
+    field = ElementTree.SubElement(schema, 'sphinx:field', name='content')
+
+    # Stop complaints about the identifier being unused. :)
+    assert field is not None
+
+    for i, filename in enumerate(iterfiles(docdir)):
+        document = ElementTree.SubElement(docset, 'sphinx:document',
+                                          {'id': str(i + 1)})
+
+        path = ElementTree.SubElement(document, 'path')
+        path.text = filename
+        content = ElementTree.SubElement(document, 'content')
+        with open(filename) as f:
+            body = f.read()
+            body = strip_control_characters(body)
+            body = body.decode('utf-8')
+
+            cdata = u'<![CDATA[[{}]]>'.format(body)
+            content.text = cdata
+
+    return docset
+
+
+def iterfiles(docdir):
+
+    docdir = os.path.expanduser(docdir)
+    for root, dirs, files in os.walk(docdir):
+        files = [f for f in files if not f[0] == '.']
+        dirs[:] = [d for d in dirs if not d[0] == '.']
+
+        for filename in fnmatch.filter(files, '*.py'):
+            yield os.path.join(root, filename)
+
+
+# http://chase-seibert.github.io/blog/2011/05/20/
+#     stripping-control-characters-in-python.html
+def strip_control_characters(text):
+
+    # unicode invalid characters
+    RE_XML_ILLEGAL =\
+        u'([\u0000-\u0008\u000b-\u000c\u000e-\u001f\ufffe-\uffff])' + u'|' + \
+        u'([%s-%s][^%s-%s])|([^%s-%s][%s-%s])|([%s-%s]$)|(^[%s-%s])' % \
+        (unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
+         unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
+         unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),)
+    text = re.sub(RE_XML_ILLEGAL, "", text)
+
+    # ascii control characters
+    text = re.sub(r"[\x01-\x1F\x7F]", "", text)
+
+    return text
+
+if __name__ == '__main__':
+    main()

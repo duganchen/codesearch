@@ -1,0 +1,12 @@
+{% extends "frame.html" %}
+
+{% block page_title %}Code Search{% endblock %}
+
+{% block title %}Code Search{% endblock %}
+
+{% block body %}
+	<p><input type="search"></p>
+	<ul class="list-group"></ul>
+{% endblock %}
+
+{% block js %}<script src="{{ url_for('static', filename='codesearch.js') }}"></script>{%endblock %}

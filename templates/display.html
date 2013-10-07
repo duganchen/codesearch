@@ -1,0 +1,15 @@
+{% extends "frame.html" %}
+
+{% block page_title %}
+	{{ filename }}
+{% endblock %}
+
+{% block title %}
+	{{ filename }}
+{% endblock %}
+
+{% block body %}
+	{% autoescape false %}
+		{{ code }}
+	{% endautoescape %}
+{% endblock %}

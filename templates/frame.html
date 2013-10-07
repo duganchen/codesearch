@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+		<title>{% block page_title %}{% endblock %}</title>
+		<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+
+	<body>
+
+		<div class="container">
+			<h1>{% block title %}{% endblock %}</h1>
+
+			{% block body %}
+			{% endblock %}
+		</div>
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
+		{% block js %}{% endblock %}
+
+	</body>
+</html>
