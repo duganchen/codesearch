@@ -7,6 +7,9 @@ from xml.etree import ElementTree
 from signal import signal, SIGPIPE, SIG_DFL
 import re
 
+# Edit this, for the files you want to index.
+PATTERNS = ['*.js', '*.mel', '*.py', '*.yaml']
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -38,16 +41,22 @@ def get_xml(docdir):
     assert field is not None
 
     for i, filename in enumerate(iterfiles(docdir)):
-        document = ElementTree.SubElement(docset, 'sphinx:document',
-                                          {'id': str(i + 1)})
 
-        path = ElementTree.SubElement(document, 'path')
-        path.text = filename
-        content = ElementTree.SubElement(document, 'content')
         with open(filename) as f:
+
             body = f.read()
             body = strip_control_characters(body)
-            body = body.decode('utf-8')
+
+            document = ElementTree.SubElement(docset, 'sphinx:document',
+                                          {'id': str(i + 1)})
+            path = ElementTree.SubElement(document, 'path')
+            path.text = filename
+            content = ElementTree.SubElement(document, 'content')
+            try:
+                body = body.decode('utf-8')
+            except UnicodeDecodeError:
+                # Skip files with invalid UTF-8
+               continue
 
             cdata = u'<![CDATA[[{}]]>'.format(body)
             content.text = cdata
@@ -62,8 +71,18 @@ def iterfiles(docdir):
         files = [f for f in files if not f[0] == '.']
         dirs[:] = [d for d in dirs if not d[0] == '.']
 
-        for filename in fnmatch.filter(files, '*.py'):
+        for filename in filterfiles(files):
             yield os.path.join(root, filename)
+
+
+def filterfiles(filelist):
+
+    files = set()
+    for pattern in PATTERNS:
+        for match in fnmatch.filter(filelist, pattern):
+            files.add(match)
+
+    return files
 
 
 # http://chase-seibert.github.io/blog/2011/05/20/
