@@ -2,6 +2,7 @@
 
 import flask
 import json
+import os
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_for_filename
@@ -47,7 +48,8 @@ def display():
         code = f.read()
     result = highlight(code, lexer, formatter)
 
-    return flask.render_template('display.html', filename=filename,
+    return flask.render_template('display.html',
+                                 filename=os.path.basename(filename),
                                  code=result)
 
 
