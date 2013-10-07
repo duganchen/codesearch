@@ -6,6 +6,7 @@ import os
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_for_filename
+from pygments.util import ClassNotFound
 from sphinxit.core.helpers import BaseSearchConfig
 from sphinxit.core.processor import Search
 
@@ -33,6 +34,7 @@ def search():
     term = flask.request.args.get('q')
     query = Search(indexes=['sourcecode'], config=BaseSearchConfig)
     query = query.match(term)
+    query = query.select('path')
     results = query.ask()
     filenames = [result['path'] for result in results['result']['items']]
     return flask.Response(json.dumps(filenames), mimetype='application/json')
@@ -42,12 +44,18 @@ def search():
 def display():
     filename = flask.request.args.get('f').strip()
 
-    lexer = get_lexer_for_filename(filename)
-    formatter = HtmlFormatter(noclasses=True)
     code = ''
     with open(filename) as f:
         code = f.read()
-    result = highlight(code, lexer, formatter)
+
+    try:
+        # This is the line that throws the exception.
+        lexer = get_lexer_for_filename(filename)
+        formatter = HtmlFormatter(noclasses=True)
+        result = highlight(code, lexer, formatter)
+    except ClassNotFound:
+        # Syntax highlighting not supported.'
+        result = '<pre>{}</pre>'.format(code)
 
     ajax = flask.request.args.get('ajax')
     if ajax is not None:

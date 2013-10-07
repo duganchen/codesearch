@@ -35,9 +35,6 @@ def get_xml(docdir):
     schema = ElementTree.SubElement(docset, 'sphinx:schema')
     attr = ElementTree.SubElement(schema, 'sphinx:attr', name='path',
                                   type='string')
-    # File extension
-    attr = ElementTree.SubElement(schema, 'sphinx:field', name='ext',
-                                  type='string')
     field = ElementTree.SubElement(schema, 'sphinx:field', name='content')
 
     # Stop complaints about the identifier being unused. :)
@@ -61,13 +58,6 @@ def get_xml(docdir):
                                               {'id': str(i + 1)})
             path = ElementTree.SubElement(document, 'path')
             path.text = filename
-
-            ext = ElementTree.SubElement(document, 'ext')
-            extension = os.path.splitext(filename)[1]
-            if extension:
-                ext.text = extension[1:]
-            else:
-                ext.text = ''
 
             content = ElementTree.SubElement(document, 'content')
             cdata = u'<![CDATA[[{}]]>'.format(body)
