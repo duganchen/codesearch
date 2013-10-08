@@ -1,6 +1,6 @@
 # Code Search
 
-Code Search is a [Sphinx](http://sphinxsearch.com)-based code search solution
+Code Search is a [Sphinx](http://sphinxsearch.com)-backed code search solution
 for your Intranet. It consists of an indexer and a search page.
 
 ## Indexer
