@@ -10,10 +10,15 @@ necessary and set it as your xmlpipe command:
 
 	source sourcecode_pipe
 	{
-	    type = xmlpipe2 xmlpipe_command = /path/to/indexfiles /path/to/repositories
+		type = xmlpipe2 xmlpipe_command = /path/to/indexfiles /path/to/repositories
 	}
 
 ## Search Page
 
 The rest is a Flask-based webapp with the client-side code written in
 CoffeeScript.
+
+## Note
+
+Both the indexer and the search page assume that the Sphinx index is named
+*sourcecode*.
