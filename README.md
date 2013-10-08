@@ -22,3 +22,11 @@ CoffeeScript.
 
 Both the indexer and the search page assume that the Sphinx index is named
 *sourcecode*.
+
+## Credits
+
+The favicon is from
+[favicon.cc](http://www.favicon.cc/?action=icon&file_id=661515)
+
+One function is taken from a blog entry, [Stripping control characters in
+Python](http://chase-seibert.github.io/blog/2011/05/20/stripping-control-characters-in-python.html).
