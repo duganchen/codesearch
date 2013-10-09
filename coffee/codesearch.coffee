@@ -21,8 +21,6 @@ jQuery ->
         my_display_url = display_url(id)
         my_ajax_url = ajax_display_url(id)
 
-        $('#myModal').modal(show=true)
-
         title = basename $(event.target).text()
 
         $.get my_ajax_url, null, (data) ->
