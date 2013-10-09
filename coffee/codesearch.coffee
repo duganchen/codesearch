@@ -15,19 +15,22 @@ jQuery ->
 
     $("ul").on "click", "a", (event) ->
 
-        event.preventDefault()
-
         id = $(this).data('id')
         my_display_url = display_url(id)
         my_ajax_url = ajax_display_url(id)
 
         title = basename $(event.target).text()
 
-        $.get my_ajax_url, null, (data) ->
-            $(".modal-title").text title
-            $("#link").attr "href", my_display_url
-            $('.modal-body').html(data)
-            $('#myModal').modal(show=true)
+        event.preventDefault()
+
+        jQuery.ajax
+            url: my_ajax_url
+            cache: false
+            success: (data) ->
+                $(".modal-title").text title
+                $("#link").attr "href", my_display_url
+                $('.modal-body').html(data)
+                $('#myModal').modal(show=true)
 
     search = (event) ->
         term = escape jQuery.trim $(event.target).val()
@@ -43,7 +46,10 @@ jQuery ->
                 li = "<li class=\"list-group-item\"><a href=\"#{url}\" data-id=\"#{result.id}\">#{result.path}</a></li>"
                 jQuery("ul").append li
 
-        jQuery.getJSON "#{search_url}?q=#{term}", null, populate
+        jQuery.ajax
+            url: "#{search_url}?q=#{term}"
+            dataType: "json"
+            success: populate
 
     jQuery('input[type="search"]').keyup search
     jQuery('input[type="search"]').change search
