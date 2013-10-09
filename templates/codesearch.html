@@ -29,7 +29,8 @@
 
 	  <!-- We bake AJAX URLs into the DOM, so our JavaScript can find them. -->
 	  <div class="hidden" id="search-url">{{ url_for('search') }}</div>
-	  <div class="hidden" id="display-url">{{ url_for('display') }}</div>
+	  <div class="hidden" id="display-url">{{ url_for('display', index=0) }}</div>
+	  <div class="hidden" id="display-ajax-url">{{ url_for('display_ajax', index=0) }}</div>
 {% endblock %}
 
 {% block js %}<script src="{{ url_for('static', filename='codesearch.js') }}"></script>{%endblock %}

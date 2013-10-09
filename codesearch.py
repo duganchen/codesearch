@@ -34,15 +34,47 @@ def search():
     term = flask.request.args.get('q')
     query = Search(indexes=['sourcecode'], config=BaseSearchConfig)
     query = query.match(term)
-    query = query.select('path')
+    query = query.select('id', 'path')
     results = query.ask()
-    filenames = [result['path'] for result in results['result']['items']]
-    return flask.Response(json.dumps(filenames), mimetype='application/json')
+    get_pair = lambda result: {'id': result['id'], 'path': result['path']}
+    pairs = [get_pair(result) for result in results['result']['items']]
+    return flask.Response(json.dumps(pairs), mimetype='application/json')
 
 
-@app.route('/display')
-def display():
-    filename = flask.request.args.get('f').strip()
+@app.route('/display/<index>')
+def display(index):
+
+    filename, html = get_path_and_content(index)
+
+    return flask.render_template('display.html',
+                                 filename=os.path.basename(filename),
+                                 path=filename, code=html)
+
+
+@app.route('/display-ajax/<index>')
+def display_ajax(index):
+
+    filename, html = get_path_and_content(index)
+
+    response = flask.Response(html)
+
+    # http://stackoverflow.com/a/2068407/240515
+    cache_control = 'no-cache, no-store, must-revalidate'
+    response.headers['Cache-Control'] = cache_control
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+
+    return response
+
+
+def get_path_and_content(index):
+    query = Search(indexes=['sourcecode'], config=BaseSearchConfig)
+    query = query.filter(id__eq=int(index))
+    results = query.ask()
+    if len(results['result']['items']) == 0:
+        flask.abort(404)
+
+    filename = results['result']['items'][0]['path']
 
     code = ''
     with open(filename) as f:
@@ -57,13 +89,8 @@ def display():
         # Syntax highlighting not supported.'
         result = '<pre>{}</pre>'.format(code)
 
-    ajax = flask.request.args.get('ajax')
-    if ajax is not None:
-        return flask.Response(result)
+    return filename, result
 
-    return flask.render_template('display.html',
-                                 filename=os.path.basename(filename),
-                                 path=filename, code=result)
 
 if __name__ == '__main__':
     main()
