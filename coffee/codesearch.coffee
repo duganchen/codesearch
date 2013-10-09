@@ -56,5 +56,4 @@ jQuery ->
         return
 
     jQuery('input[type="search"]').keyup search
-    jQuery('input[type="search"]').change search
     return
