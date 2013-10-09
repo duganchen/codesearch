@@ -53,7 +53,6 @@ jQuery ->
             url: "#{search_url}?q=#{term}"
             dataType: "json"
             success: populate
-
         return
 
     jQuery('input[type="search"]').keyup search
