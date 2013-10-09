@@ -31,6 +31,8 @@ jQuery ->
                 $("#link").attr "href", my_display_url
                 $('.modal-body').html(data)
                 $('#myModal').modal(show=true)
+                return
+        return
 
     search = (event) ->
         term = escape jQuery.trim $(event.target).val()
@@ -45,11 +47,15 @@ jQuery ->
                 url = display_url(result.id)
                 li = "<li class=\"list-group-item\"><a href=\"#{url}\" data-id=\"#{result.id}\">#{result.path}</a></li>"
                 jQuery("ul").append li
+            return
 
         jQuery.ajax
             url: "#{search_url}?q=#{term}"
             dataType: "json"
             success: populate
 
+        return
+
     jQuery('input[type="search"]').keyup search
     jQuery('input[type="search"]').change search
+    return
