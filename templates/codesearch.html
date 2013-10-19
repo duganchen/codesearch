@@ -30,17 +30,15 @@
 {% endblock %}
 
 {% block js %}
+{% autoescape false %}
 <script>
 (function () {
     'use strict';
 
-    window.urls = {
-        search: '{{ search_url}}',
-        display: '{{ display_url }}',
-        ajax_display: '{{ ajax_display_url}}'
-    };
+	window.urls = JSON.parse('{{ urls }}');
 }());
 </script>
+{% endautoescape %}
 
 <script src="{{ url_for('static', filename='codesearch.js') }}"></script>
 {%endblock %}
