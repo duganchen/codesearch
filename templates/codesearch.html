@@ -12,11 +12,11 @@
 	<ul class="list-group"></ul>
 
 	 <!-- Modal -->
-	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
 	    <div class="modal-dialog">
 	      <div class="modal-content">
 	        <div class="modal-header">
-	          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
 	          <h4 class="modal-title">...</h4>
 			  <a id="link" href="#">Link</a>
 	        </div>
@@ -28,9 +28,9 @@
 	  </div><!-- /.modal -->
 
 	  <!-- We bake AJAX URLs into the DOM, so our JavaScript can find them. -->
-	  <div class="hidden" id="search-url">{{ url_for('search') }}</div>
-	  <div class="hidden" id="display-url">{{ url_for('display', index=0) }}</div>
-	  <div class="hidden" id="display-ajax-url">{{ url_for('display_ajax', index=0) }}</div>
+	  <div class="hidden" id="search-url">{{ search_url }}</div>
+	  <div class="hidden" id="display-url">{{ display_url }}</div>
+	  <div class="hidden" id="display-ajax-url">{{ ajax_display_url }}</div>
 {% endblock %}
 
 {% block js %}<script src="{{ url_for('static', filename='codesearch.js') }}"></script>{%endblock %}

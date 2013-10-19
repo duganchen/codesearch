@@ -1,10 +1,10 @@
 $ ->
 
     display_url = (id) ->
-        $("#display-url").text().slice(0, -1) + id
+        $("#display-url").text() + id
 
     ajax_display_url = (id) ->
-        $("#display-ajax-url").text().slice(0, -1) + id
+        $("#display-ajax-url").text() + id
 
     search_url = $('#search-url').text()
 

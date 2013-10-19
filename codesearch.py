@@ -55,7 +55,10 @@ def favicon():
 
 @app.route('/')
 def search_page():
-    return flask.render_template('codesearch.html')
+    return flask.render_template(
+        'codesearch.html', search_url=flask.url_for('search'),
+        display_url=flask.url_for('display', index=0)[:-1],
+        ajax_display_url=flask.url_for('ajax_display', index=0)[:-1])
 
 
 @app.route('/ajax/search')
@@ -81,7 +84,7 @@ def display(index):
 
 
 @app.route('/ajax/display/<index>')
-def display_ajax(index):
+def ajax_display(index):
 
     filename, html = get_path_and_content(index)
     return uncached(html)
