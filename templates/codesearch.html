@@ -27,10 +27,20 @@
 	    </div><!-- /.modal-dialog -->
 	  </div><!-- /.modal -->
 
-	  <!-- We bake AJAX URLs into the DOM, so our JavaScript can find them. -->
-	  <div class="hidden" id="search-url">{{ search_url }}</div>
-	  <div class="hidden" id="display-url">{{ display_url }}</div>
-	  <div class="hidden" id="display-ajax-url">{{ ajax_display_url }}</div>
 {% endblock %}
 
-{% block js %}<script src="{{ url_for('static', filename='codesearch.js') }}"></script>{%endblock %}
+{% block js %}
+<script>
+(function () {
+    'use strict';
+
+    window.urls = {
+        search: '{{ search_url}}',
+        display: '{{ display_url }}',
+        ajax_display: '{{ ajax_display_url}}'
+    };
+}());
+</script>
+
+<script src="{{ url_for('static', filename='codesearch.js') }}"></script>
+{%endblock %}

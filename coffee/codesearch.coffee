@@ -1,12 +1,12 @@
 $ ->
 
     display_url = (id) ->
-        $("#display-url").text() + id
+        window.urls.display + id
 
     ajax_display_url = (id) ->
-        $("#display-ajax-url").text() + id
+        window.urls.display + id
 
-    search_url = $('#search-url').text()
+    search_url = window.urls.search
 
     basename = (path) ->
         splits = path.split('/')
