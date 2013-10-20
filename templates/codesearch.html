@@ -5,11 +5,13 @@
 {% block title %}Code Search{% endblock %}
 
 {% block body %}
-	<p><input type="search"></p>
-	<p>
-		<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
-	</p>
-	<ul class="list-group"></ul>
+	<div data-ng-controller="SearchCtrl">
+		<p><input type="search" data-ng-model="term" data-ng-change="search()"></p>
+		<p>
+			<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
+		</p>
+		<ul class="list-group"></ul>
+	</div>
 
 	 <!-- Modal -->
 	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
@@ -30,15 +32,5 @@
 {% endblock %}
 
 {% block js %}
-{% autoescape false %}
-<script>
-(function () {
-    'use strict';
-
-	window.urls = JSON.parse('{{ urls }}');
-}());
-</script>
-{% endautoescape %}
-
 <script src="{{ url_for('static', filename='codesearch.js') }}"></script>
 {%endblock %}
