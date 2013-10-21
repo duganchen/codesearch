@@ -19,6 +19,10 @@ app.controller "SearchCtrl", ($scope, $http) ->
 
     return
 
+    $scope.popUp = ($event) ->
+        console.log $event.target
+
+
 #$ ->
 #
 #    display_url = (id) ->

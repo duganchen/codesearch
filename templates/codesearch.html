@@ -5,13 +5,13 @@
 {% block title %}Code Search{% endblock %}
 
 {% block body %}
-	<div data-ng-controller="SearchCtrl">
+	<div data-ng-app="CodeSearch" data-ng-controller="SearchCtrl">
 		<p><input type="search" data-ng-model="term" data-ng-change="search()"></p>
 		<p>
 			<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
 		</p>
 		<ul class="list-group" data-ng-repeat="result in results">
-			<li class="list-group-item ng-cloak"><a href="{{ '{{result.display_url}}' }}" data-ajax-url="{{ '{{result.ajax_url}}' }}">{{ '{{result.path}}' }} data-ng-cloak</a></li>
+			<li class="list-group-item ng-cloak"><a href="{{ '{{result.display_url}}' }}" data-ajax-url="{{ '{{result.ajax_url}}' }}">{{ '{{result.path}}' }} data-ng-click="popup()</a></li>
 		</ul>
 	</div>
 
@@ -30,9 +30,16 @@
 	      </div><!-- /.modal-content -->
 	    </div><!-- /.modal-dialog -->
 	  </div><!-- /.modal -->
-
 {% endblock %}
 
 {% block js %}
-<script src="{{ url_for('static', filename='codesearch.js') }}"></script>
-{%endblock %}
+		<script>
+		(function () {
+		    'use strict';
+
+			window.urls = JSON.parse({% autoescape false %}'{{ urls }}'{% endautoescape %});
+		}());
+		</script>
+
+		<script src="{{ url_for('static', filename='codesearch.js') }}"></script>
+{% endblock %}
