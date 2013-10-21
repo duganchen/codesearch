@@ -1,4 +1,4 @@
-app = angular.module "CodeSearch", ["ngResource"]
+app = angular.module "CodeSearch", []
 
 app.controller "SearchCtrl", ($scope, $http) ->
 

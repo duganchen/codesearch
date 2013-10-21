@@ -6,6 +6,7 @@
 		{% block meta %}{%endblock %}
 		<title>{% block page_title %}{% endblock %}</title>
 		<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+		<link href="{{ url_for('static', filename='codesearch.css') }}" rel="stylesheet">
 	</head>
 
 	<body>
@@ -17,10 +18,7 @@
 			{% endblock %}
 		</div>
 
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-		<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-resource.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
 
 		<script>
 		(function () {
