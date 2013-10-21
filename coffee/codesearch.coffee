@@ -19,8 +19,16 @@ app.controller "SearchCtrl", ($scope, $http) ->
 
     return
 
-    $scope.popUp = ($event) ->
-        console.log $event.target
+app.directive "popup", ->
+
+    console.log "Binding popup"
+
+    (scope, element) ->
+
+        element.bind "click", (e) ->
+            e.preventDefault()
+        return
+
 
 
 #$ ->
