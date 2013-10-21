@@ -56,10 +56,7 @@ def favicon():
 @app.route('/')
 def search_page():
 
-    urls = {'search': flask.url_for('search'),
-            'display': flask.url_for('display', index=0)[:-1],
-            'ajax_display': flask.url_for('ajax_display', index=0)[:-1]}
-
+    urls = {'search': flask.url_for('search')}
 
     return flask.render_template(
         'codesearch.html', urls=json.dumps(urls))
@@ -72,9 +69,16 @@ def search():
     query = query.match(term)
     query = query.select('id', 'path')
     results = query.ask()
-    get_pair = lambda result: {'id': result['id'], 'path': result['path']}
-    pairs = [get_pair(result) for result in results['result']['items']]
-    return uncached(json.dumps(pairs), mimetype='application/json')
+    results = [get_row(result) for result in results['result']['items']]
+    return uncached(json.dumps(results), mimetype='application/json')
+
+
+def get_row(result):
+    return {
+        'ajax_url': flask.url_for('ajax_display', index=result['id']),
+        'display_url': flask.url_for('display', index=result['id']),
+        'path': result['path']
+    }
 
 
 @app.route('/display/<index>')

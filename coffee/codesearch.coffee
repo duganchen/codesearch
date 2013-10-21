@@ -13,6 +13,8 @@ app.controller "SearchCtrl", ($scope, $http) ->
                 params: q: "q"
             result.success (data) ->
                 $scope.results = data
+        else:
+            $scope.results = []
         return
 
     return
