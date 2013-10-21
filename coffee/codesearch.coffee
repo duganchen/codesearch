@@ -1,18 +1,18 @@
 app = angular.module "CodeSearch", ["ngResource"]
 
-app.controller "SearchCtrl", ($scope, $resource) ->
+app.controller "SearchCtrl", ($scope, $http) ->
 
-    search_resource = $resource window.urls.search, {},
-        query:
-            method: 'GET'
-            params: "q": ""
-            isArray: true
+    $scope.results = []
 
     $scope.search = ->
         q = $scope.term.trim()
         if q.length > 0
-            console.log window.urls.search
-            console.log search_resource.query("q": q)
+            result = $http
+                method: "GET",
+                url: window.urls.search,
+                params: q: "q"
+            result.success (data) ->
+                $scope.results = data
         return
 
     return
