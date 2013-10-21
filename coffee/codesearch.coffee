@@ -21,12 +21,13 @@ app.controller "SearchCtrl", ($scope, $http) ->
 
 app.directive "popup", ->
 
-    console.log "Binding popup"
-
     (scope, element) ->
 
         element.bind "click", (e) ->
             e.preventDefault()
+            console.log e.target.getAttribute "href"
+            console.log e.target.innerText
+            console.log e.target.dataset.ajaxUrl
         return
 
 
