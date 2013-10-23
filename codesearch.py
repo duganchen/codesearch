@@ -95,7 +95,10 @@ def display(index):
 def ajax_display(index):
 
     filename, html = get_path_and_content(index)
-    return uncached(html)
+    data = {'title': os.path.basename(filename),
+            'body': html,
+            'url': flask.url_for('display', index=index)}
+    return uncached(json.dumps(data), mimetype='application/json')
 
 
 def get_path_and_content(index):

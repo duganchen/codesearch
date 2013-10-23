@@ -1,11 +1,14 @@
-app = angular.module "CodeSearch", []
+app = angular.module "CodeSearch", ["ngSanitize"]
 
-app.controller "SearchCtrl", ($scope, $http) ->
 
-    $scope.results = []
+controller = app.controller "SearchCtrl", ($scope, $http, modalService) ->
+
+    $scope.model =
+        term: ""
+    $scope.modal = modalService
 
     $scope.search = ->
-        q = $scope.term.trim()
+        q = $scope.model.term.trim()
         if q.length > 0
             result = $http
                 method: "GET",
@@ -16,81 +19,43 @@ app.controller "SearchCtrl", ($scope, $http) ->
         else:
             $scope.results = []
         return
-
     return
 
-app.directive "popup", ->
+
+controller.factory "modalService", ->
+    href = "#"
+    title = ""
+    body = ""
+
+    getUrl: -> href,
+    getTitle: -> title
+    getBody: -> body
+    setTitle: (newTitle) ->
+        title = newTitle
+    setUrl: (newUrl) ->
+        href = newUrl
+    setBody: (newBody) ->
+
+        body = newBody
+    show: ->
+        $('#myModal').modal(show=true)
+
+
+controller.directive "popup", ($http) ->
 
     (scope, element) ->
 
-        element.bind "click", (e) ->
-            e.preventDefault()
-            console.log e.target.getAttribute "href"
-            console.log e.target.innerText
-            console.log e.target.dataset.ajaxUrl
+        element.bind "click", (event) ->
+            event.preventDefault()
+
+            result = $http
+                method: "GET",
+                url: event.target.dataset.ajaxUrl
+
+            result.success (data) ->
+                scope.modal.setTitle data.title
+                scope.modal.setBody data.body
+                scope.modal.setUrl data.url
+                scope.modal.show()
+            return
         return
-
-
-
-#$ ->
-#
-#    display_url = (id) ->
-#        window.urls.display + id
-#
-#    ajax_display_url = (id) ->
-#        window.urls.display + id
-#
-#    search_url = window.urls.search
-#
-#    basename = (path) ->
-#        splits = path.split('/')
-#        length = splits.length
-#        splits[splits.length - 1]
-#
-#    popup = (link_target) ->
-#        id = $(link_target).data('id')
-#        my_display_url = display_url(id)
-#        my_ajax_url = ajax_display_url(id)
-#        title = basename $(link_target).text()
-#        event.preventDefault()
-#
-#        $.ajax
-#            url: my_ajax_url
-#            cache: false
-#            success: (data) ->
-#                $(".modal-title").text title
-#                $("#link").attr "href", my_display_url
-#                $('.modal-body').html(data)
-#                $('#myModal').modal(show=true)
-#                return
-#        return
-#
-#    $("ul").click (event) ->
-#        if $(event.target).prop("tagName") is "A"
-#            event.preventDefault()
-#            popup(event.target)
-#        return
-#
-#    search = (event) ->
-#        term = escape $.trim $(event.target).val()
-#
-#        if not term
-#            $("ul").empty()
-#            return
-#
-#        populate = (data) ->
-#            $("ul").empty()
-#            for result in data
-#                url = display_url(result.id)
-#                li = "<li class=\"list-group-item\"><a href=\"#{url}\" data-id=\"#{result.id}\">#{result.path}</a></li>"
-#                $("ul").append li
-#            return
-#
-#        $.ajax
-#            url: "#{search_url}?q=#{term}"
-#            dataType: "json"
-#            success: populate
-#        return
-#
-#    $('input[type="search"]').keyup search
-#    return

@@ -6,30 +6,30 @@
 
 {% block body %}
 	<div data-ng-app="CodeSearch" data-ng-controller="SearchCtrl">
-		<p><input type="search" data-ng-model="term" data-ng-change="search()"></p>
-		<p>
-			<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
-		</p>
-		<ul class="list-group" data-ng-repeat="result in results">
-			<li class="list-group-item ng-cloak"><a href="{{ '{{result.display_url}}' }}" data-ajax-url="{{ '{{result.ajax_url}}' }}" data-popup>{{ '{{result.path}}' }}</a></li>
-		</ul>
-	</div>
+		<div >
+			<p><input type="search" data-ng-model="model.term" data-ng-change="search()"></p>
+			<p>
+				<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
+			</p>
+			<ul class="list-group" data-ng-repeat="result in results">
+				<li class="list-group-item ng-cloak"><a href="{{ '{{result.display_url}}' }}" data-popup data-ajax-url="{{ '{{result.ajax_url}}'}}">{{ '{{result.path}}' }}</a></li>
+			</ul>
+		</div>
 
-	 <!-- Modal -->
-	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-	    <div class="modal-dialog">
-	      <div class="modal-content">
-	        <div class="modal-header">
-	          <button type="button" class="close" data-dismiss="modal">&times;</button>
-	          <h4 class="modal-title">...</h4>
-			  <a id="link" href="#">Link</a>
-	        </div>
-	        <div class="modal-body">
-	          ...
-	        </div>
-	      </div><!-- /.modal-content -->
-	    </div><!-- /.modal-dialog -->
-	  </div><!-- /.modal -->
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">{{ '{{modal.getTitle()}}' }}</h4>
+						<a id="link" href="{{ '{{modal.getUrl()}'}}">Link</a>
+					</div>
+					<div class="modal-body" data-ng-bind-html-unsafe="modal.getBody()"></div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	</div>
 {% endblock %}
 
 {% block js %}
