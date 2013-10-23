@@ -1,11 +1,11 @@
 app = angular.module "CodeSearch", ["ngSanitize"]
 
 
-controller = app.controller "SearchCtrl", ($scope, $http, modalService) ->
+controller = app.controller "SearchCtrl", ($scope, $http) ->
 
     $scope.model =
         term: ""
-    $scope.modal = modalService
+        #$scope.modal = modalService
 
     $scope.search = ->
         q = $scope.model.term.trim()
@@ -46,7 +46,12 @@ controller.factory "modalService", ->
         return
 
 
-controller.directive "popup", ($http) ->
+modalController = app.controller "ModalCtrl", ($scope, modalService) ->
+    $scope.modal = modalService
+    return
+
+
+modalController.directive "popup", ($http, modalService) ->
 
     (scope, element, attrs) ->
 
@@ -59,10 +64,11 @@ controller.directive "popup", ($http) ->
                     url: attrs.popup
 
                 result.success (data) ->
-                    scope.modal.setTitle data.title
-                    scope.modal.setBody data.body
-                    scope.modal.setUrl data.url
-                    scope.modal.show()
+                    modalService.setTitle data.title
+                    modalService.setBody data.body
+                    modalService.setUrl data.url
+                    modalService.show()
+                    return
                 return
             return
         return

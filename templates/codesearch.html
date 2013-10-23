@@ -4,9 +4,14 @@
 
 {% block title %}Code Search{% endblock %}
 
+{% block css %}
+	<link href="{{ url_for('static', filename='codesearch.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block body %}
-	<div data-ng-app="CodeSearch" data-ng-controller="SearchCtrl">
-		<div >
+
+	<div data-ng-app="CodeSearch">
+		<div data-ng-controller="SearchCtrl">
 			<p><input type="search" data-ng-model="model.term" data-ng-change="search()"></p>
 			<p>
 				<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
@@ -17,7 +22,7 @@
 		</div>
 
 		<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-ng-controller="ModalCtrl">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -41,5 +46,9 @@
 	}());
 	</script>
 
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-sanitize.js"></script>
 	<script src="{{ url_for('static', filename='codesearch.js') }}"></script>
 {% endblock %}
