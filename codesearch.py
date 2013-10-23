@@ -75,35 +75,32 @@ def search():
 
 def get_row(result):
     return {
-        'ajax_url': flask.url_for('ajax_display', index=result['id']),
-        'display_url': flask.url_for('display', index=result['id']),
+        'ajax_url': flask.url_for('ajax_display', sphinx_id=result['id']),
+        'display_url': flask.url_for('display', sphinx_id=result['id']),
         'path': result['path']
     }
 
 
-@app.route('/display/<index>')
-def display(index):
+@app.route('/display/<int:sphinx_id>')
+def display(sphinx_id):
 
-    filename, html = get_path_and_content(index)
-
+    sourcecode = get_sphinx_data(sphinx_id)
     return flask.render_template('display.html',
-                                 filename=os.path.basename(filename),
-                                 path=filename, code=html)
+                                 filename=os.path.basename(sourcecode['path']),
+                                 path=sourcecode['path'],
+                                 code=sourcecode['body'])
 
 
-@app.route('/ajax/display/<index>')
-def ajax_display(index):
+@app.route('/ajax/display/<int:sphinx_id>')
+def ajax_display(sphinx_id):
 
-    filename, html = get_path_and_content(index)
-    data = {'title': os.path.basename(filename),
-            'body': html,
-            'url': flask.url_for('display', index=index)}
-    return uncached(json.dumps(data), mimetype='application/json')
+    sourcecode = get_sphinx_data(sphinx_id)
+    return uncached(json.dumps(sourcecode), mimetype='application/json')
 
 
-def get_path_and_content(index):
+def get_sphinx_data(sphinx_id):
     query = Search(indexes=['sourcecode'], config=BaseSearchConfig)
-    query = query.filter(id__eq=int(index))
+    query = query.filter(id__eq=sphinx_id)
     results = query.ask()
     if len(results['result']['items']) == 0:
         flask.abort(404)
@@ -111,7 +108,7 @@ def get_path_and_content(index):
     filename = results['result']['items'][0]['path']
 
     if not os.path.isfile(filename):
-        return filename, 'File not found. Please reindex.'
+        return filename, 'File not found. Please resphinx_id.'
 
     code = ''
     with open(filename) as f:
@@ -126,7 +123,9 @@ def get_path_and_content(index):
         # Syntax highlighting not supported.'
         result = '<pre>{}</pre>'.format(code)
 
-    return filename, result
+    url = flask.url_for('display', sphinx_id=sphinx_id)
+
+    return {'body': result, 'path': filename, 'url': url}
 
 
 if __name__ == '__main__':
