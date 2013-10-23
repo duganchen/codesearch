@@ -5,7 +5,6 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
 
     $scope.model =
         term: ""
-        #$scope.modal = modalService
 
     $scope.search = ->
         q = $scope.model.term.trim()
