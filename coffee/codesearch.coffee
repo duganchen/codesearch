@@ -24,7 +24,13 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
     return
 
 
-controller.factory "modalService", ->
+
+modalController = app.controller "ModalCtrl", ($scope, modalService) ->
+    $scope.modal = modalService
+    return
+
+
+modalController.factory "modalService", ->
     href = "#"
     title = ""
     body = ""
@@ -45,10 +51,6 @@ controller.factory "modalService", ->
         $('#myModal').modal(show: true)
         return
 
-
-modalController = app.controller "ModalCtrl", ($scope, modalService) ->
-    $scope.modal = modalService
-    return
 
 
 modalController.directive "popup", ($http, modalService) ->
