@@ -95,6 +95,7 @@ def display(sphinx_id):
 def ajax_display(sphinx_id):
 
     sourcecode = get_sphinx_data(sphinx_id)
+    sourcecode['title'] = os.path.basename(sourcecode['path'])
     return uncached(json.dumps(sourcecode), mimetype='application/json')
 
 

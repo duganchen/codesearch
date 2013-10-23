@@ -16,9 +16,11 @@ controller = app.controller "SearchCtrl", ($scope, $http, modalService) ->
                 params: q: "q"
             result.success (data) ->
                 $scope.results = data
-        else:
+                return
+        else
             $scope.results = []
         return
+
     return
 
 
@@ -32,13 +34,16 @@ controller.factory "modalService", ->
     getBody: -> body
     setTitle: (newTitle) ->
         title = newTitle
+        return
     setUrl: (newUrl) ->
         href = newUrl
+        return
     setBody: (newBody) ->
-
         body = newBody
+        return
     show: ->
-        $('#myModal').modal(show=true)
+        $('#myModal').modal(show: true)
+        return
 
 
 controller.directive "popup", ($http) ->
@@ -58,4 +63,5 @@ controller.directive "popup", ($http) ->
                 scope.modal.setUrl data.url
                 scope.modal.show()
             return
+
         return
