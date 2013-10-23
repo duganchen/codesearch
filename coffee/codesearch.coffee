@@ -48,20 +48,21 @@ controller.factory "modalService", ->
 
 controller.directive "popup", ($http) ->
 
-    (scope, element) ->
+    (scope, element, attrs) ->
 
-        element.bind "click", (event) ->
-            event.preventDefault()
+        attrs.$observe "popup", ->
+            element.bind "click", (event) ->
+                event.preventDefault()
 
-            result = $http
-                method: "GET",
-                url: event.target.dataset.ajaxUrl
+                result = $http
+                    method: "GET",
+                    url: attrs.popup
 
-            result.success (data) ->
-                scope.modal.setTitle data.title
-                scope.modal.setBody data.body
-                scope.modal.setUrl data.url
-                scope.modal.show()
+                result.success (data) ->
+                    scope.modal.setTitle data.title
+                    scope.modal.setBody data.body
+                    scope.modal.setUrl data.url
+                    scope.modal.show()
+                return
             return
-
         return
