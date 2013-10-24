@@ -18,15 +18,13 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
                 $scope.model.results = data
                 return
         else
-            console.log "Clearing"
             $scope.model.results = []
         return
 
     return
 
 
-
-modalController = app.controller "ModalCtrl", ($scope, modalService) ->
+modalController = controller.controller "ModalCtrl", ($scope, modalService) ->
     $scope.modal = modalService
     return
 
