@@ -39,3 +39,4 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
             $('#myModal').modal(show: true)
             return
         return
+    return
