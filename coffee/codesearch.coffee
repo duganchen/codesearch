@@ -1,35 +1,31 @@
 app = angular.module "CodeSearch", ["ngSanitize"]
 
 
-controller = app.controller "SearchCtrl", ($scope, $http) ->
+controller = app.controller "SearchCtrl", ($scope, $http, modalService) ->
 
-    $scope.model =
+    $scope.search =
         term: ""
         results: []
+    $scope.modal = modalService
 
-    $scope.search = ->
-        q = $scope.model.term.trim()
+    $scope.do_search = ->
+        q = $scope.search.term.trim()
         if q.length > 0
             result = $http
                 method: "GET",
                 url: window.urls.search,
                 params: "q": q
             result.success (data) ->
-                $scope.model.results = data
+                $scope.search.results = data
                 return
         else
-            $scope.model.results = []
+            $scope.search.results = []
         return
 
     return
 
 
-modalController = controller.controller "ModalCtrl", ($scope, modalService) ->
-    $scope.modal = modalService
-    return
-
-
-modalController.factory "modalService", ->
+controller.factory "modalService", ->
     href = "#"
     title = ""
     body = ""
@@ -52,7 +48,7 @@ modalController.factory "modalService", ->
 
 
 
-modalController.directive "popup", ($http, modalService) ->
+controller.directive "popup", ($http, modalService) ->
 
     (scope, element, attrs) ->
 

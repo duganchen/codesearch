@@ -10,19 +10,17 @@
 
 {% block body %}
 
-	<div data-ng-app="CodeSearch">
-		<div data-ng-controller="SearchCtrl">
-			<p><input type="search" data-ng-model="model.term" data-ng-change="search()"></p>
-			<p>
-				<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
-			</p>
-			<ul class="list-group" data-ng-repeat="result in model.results">
-				<li class="list-group-item ng-cloak"><a data-ng-href="{{ '{{result.display_url}}' }}" data-popup="{{ '{{result.ajax_url}}' }}">{{ '{{result.path}}' }}</a></li>
-			</ul>
-		</div>
+	<div data-ng-app="CodeSearch" data-ng-controller="SearchCtrl">
+		<p><input type="search" data-ng-model="search.term" data-ng-change="do_search()"></p>
+		<p>
+			<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
+		</p>
+		<ul class="list-group" data-ng-repeat="result in search.results">
+			<li class="list-group-item ng-cloak"><a data-ng-href="{{ '{{result.display_url}}' }}" data-popup="{{ '{{result.ajax_url}}' }}">{{ '{{result.path}}' }}</a></li>
+		</ul>
 
 		<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-ng-controller="ModalCtrl">
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
