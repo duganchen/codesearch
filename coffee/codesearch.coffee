@@ -5,6 +5,7 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
 
     $scope.model =
         term: ""
+        results: []
 
     $scope.search = ->
         q = $scope.model.term.trim()
@@ -14,10 +15,11 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
                 url: window.urls.search,
                 params: q: "q"
             result.success (data) ->
-                $scope.results = data
+                $scope.model.results = data
                 return
         else
-            $scope.results = []
+            console.log "Clearing"
+            $scope.model.results = []
         return
 
     return
