@@ -5,6 +5,8 @@ controller = app.controller "SearchCtrl", ($scope, modalService, resultsService)
 
     $scope.results = resultsService
     $scope.modal = modalService
+    $scope.search =
+        term: ""
     return
 
 
@@ -66,20 +68,18 @@ controller.directive "codesearchPopup", ($http, modalService) ->
 
     (scope, element, attrs) ->
 
-        attrs.$observe "popup", ->
-            element.on "click", (event) ->
-                event.preventDefault()
+        element.on "click", (event) ->
+            event.preventDefault()
 
-                result = $http
-                    method: "GET",
-                    url: attrs.codesearchPopup
+            result = $http
+                method: "GET",
+                url: attrs.codesearchPopup
 
-                result.success (data) ->
-                    modalService.setTitle data.title
-                    modalService.setBody data.body
-                    modalService.setUrl data.url
-                    modalService.show()
-                    return
+            result.success (data) ->
+                modalService.setTitle data.title
+                modalService.setBody data.body
+                modalService.setUrl data.url
+                modalService.show()
                 return
             return
         return
