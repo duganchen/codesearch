@@ -1,28 +1,42 @@
 app = angular.module "CodeSearch", ["ngSanitize"]
 
 
-controller = app.controller "SearchCtrl", ($scope, $http, modalService) ->
+controller = app.controller "SearchCtrl", ($scope, modalService, resultsService) ->
 
-    $scope.search =
-        term: ""
-        results: []
+    $scope.results = resultsService
     $scope.modal = modalService
-
-    $scope.do_search = ->
-        q = $scope.search.term.trim()
-        if q.length > 0
-            result = $http
-                method: "GET",
-                url: window.urls.search,
-                params: "q": q
-            result.success (data) ->
-                $scope.search.results = data
-                return
-        else
-            $scope.search.results = []
-        return
-
     return
+
+
+controller.directive "codesearchSearch", ($http, resultsService) ->
+
+    (scope, element, attrs) ->
+
+        element.on "keyup", (event) ->
+
+            q = event.target.value.trim()
+            if q.length > 0
+                result = $http
+                    method: "GET",
+                    url: attrs.codesearchSearch,
+                    params: "q": q
+                result.success (data) ->
+                    resultsService.setResults data
+                    return
+            else
+                resultsService.setResults []
+            return
+
+
+controller.factory "resultsService", ->
+
+    _results = []
+
+    getResults: ->
+        return _results
+    setResults: (value) ->
+        _results = value
+        return
 
 
 controller.factory "modalService", ->
@@ -48,17 +62,17 @@ controller.factory "modalService", ->
 
 
 
-controller.directive "popup", ($http, modalService) ->
+controller.directive "codesearchPopup", ($http, modalService) ->
 
     (scope, element, attrs) ->
 
         attrs.$observe "popup", ->
-            element.bind "click", (event) ->
+            element.on "click", (event) ->
                 event.preventDefault()
 
                 result = $http
                     method: "GET",
-                    url: attrs.popup
+                    url: attrs.codesearchPopup
 
                 result.success (data) ->
                     modalService.setTitle data.title

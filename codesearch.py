@@ -56,10 +56,8 @@ def favicon():
 @app.route('/')
 def search_page():
 
-    urls = {'search': flask.url_for('search')}
-
     return flask.render_template(
-        'codesearch.html', urls=json.dumps(urls))
+        'codesearch.html', search_url=flask.url_for('search'))
 
 
 @app.route('/ajax/search')
