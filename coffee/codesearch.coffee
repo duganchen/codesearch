@@ -5,8 +5,6 @@ controller = app.controller "SearchCtrl", ($scope, modalService, resultsService)
 
     $scope.results = resultsService
     $scope.modal = modalService
-    $scope.search =
-        term: ""
     return
 
 
