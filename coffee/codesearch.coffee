@@ -40,3 +40,8 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
             return
         return
     return
+
+
+controller.directive "codesearchPopup", ->
+
+    templateUrl: "popup.html"
