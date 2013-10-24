@@ -26,6 +26,7 @@ controller.directive "codesearchSearch", ($http, resultsService) ->
             else
                 resultsService.setResults []
             return
+        return
 
 
 controller.factory "resultsService", ->
