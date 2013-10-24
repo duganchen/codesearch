@@ -16,7 +16,7 @@ controller.directive "codesearchSearch", ($http, resultsService) ->
 
         element.on "keyup", (event) ->
 
-            q = event.target.value.trim()
+            q = escape event.target.value.trim()
             if q.length > 0
                 result = $http
                     method: "GET",
