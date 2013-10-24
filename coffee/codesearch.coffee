@@ -1,7 +1,7 @@
 app = angular.module "CodeSearch", ["ngSanitize"]
 
 
-controller = app.controller "SearchCtrl", ($scope, $http, modalService) ->
+controller = app.controller "SearchCtrl", ($scope, $http) ->
 
     $scope.search =
         term: ""
@@ -20,34 +20,15 @@ controller = app.controller "SearchCtrl", ($scope, $http, modalService) ->
            $scope.search.results = []
        return
 
-    $scope.modal = modalService
+    $scope.modal =
+        body: ""
+        title: "#",
+        url: "#"
 
     return
 
-controller.factory "modalService", ->
-    href = "#"
-    title = ""
-    body = ""
 
-    getUrl: -> href,
-    getTitle: -> title
-    getBody: -> body
-    setTitle: (newTitle) ->
-        title = newTitle
-        return
-    setUrl: (newUrl) ->
-        href = newUrl
-        return
-    setBody: (newBody) ->
-        body = newBody
-        return
-    show: ->
-        $('#myModal').modal(show: true)
-        return
-
-
-
-controller.directive "codesearchPopup", ($http, modalService) ->
+controller.directive "codesearchPopup", ($http) ->
 
     (scope, element, attrs) ->
 
@@ -59,10 +40,10 @@ controller.directive "codesearchPopup", ($http, modalService) ->
                 url: attrs.codesearchPopup
 
             result.success (data) ->
-                modalService.setTitle data.title
-                modalService.setBody data.body
-                modalService.setUrl data.url
-                modalService.show()
+                scope.modal.title = data.title
+                scope.modal.body = data.body
+                scope.modal.url = data.url
+                $('#myModal').modal(show: true)
                 return
             return
         return
