@@ -7,7 +7,7 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
         term: ""
         results: []
     $scope.perform = ->
-       q = $scope.search.term.trim()
+       q = escape $scope.search.term.trim()
        if q.length > 0
            result = $http
                method: "GET",
