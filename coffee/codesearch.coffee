@@ -22,28 +22,20 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
 
     $scope.modal =
         body: ""
-        title: "",
+        title: ""
         url: "#"
 
-    return
+    $scope.popup = ($event) ->
+        $event.preventDefault()
 
+        result = $http
+            method: "GET"
+            url: $event.target.dataset.ajaxUrl
 
-controller.directive "codesearchPopup", ($http) ->
-
-    (scope, element, attrs) ->
-
-        element.on "click", (event) ->
-            event.preventDefault()
-
-            result = $http
-                method: "GET",
-                url: attrs.codesearchPopup
-
-            result.success (data) ->
-                scope.modal.title = data.title
-                scope.modal.body = data.body
-                scope.modal.url = data.url
-                $('#myModal').modal(show: true)
-                return
+        result.success (data) ->
+            $scope.modal.title = data.title
+            $scope.modal.body = data.body
+            $scope.modal.url = data.url
+            $('#myModal').modal(show: true)
             return
         return

@@ -16,7 +16,7 @@
 			<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
 		</p>
 		<ul class="list-group" data-ng-repeat="result in search.results">
-			<li class="list-group-item ng-cloak"><a data-ng-href="{{ '{{result.display_url}}' }}" data-codesearch-popup="{{ '{{result.ajax_url}}' }}">{{ '{{result.path}}' }}</a></li>
+			<li class="list-group-item ng-cloak"><a data-ng-href="{{ '{{result.display_url}}' }}" data-ajax-url="{{ '{{result.ajax_url}}' }}" data-ng-click="popup($event)">{{ '{{result.path}}' }}</a></li>
 		</ul>
 
 		<!-- Modal -->
