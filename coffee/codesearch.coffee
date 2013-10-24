@@ -22,7 +22,7 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
 
     $scope.modal =
         body: ""
-        title: "#",
+        title: "",
         url: "#"
 
     return
