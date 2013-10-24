@@ -13,7 +13,7 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
             result = $http
                 method: "GET",
                 url: window.urls.search,
-                params: q: "q"
+                params: "q": q
             result.success (data) ->
                 $scope.model.results = data
                 return
