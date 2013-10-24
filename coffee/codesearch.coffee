@@ -1,44 +1,28 @@
 app = angular.module "CodeSearch", ["ngSanitize"]
 
 
-controller = app.controller "SearchCtrl", ($scope, modalService, resultsService) ->
+controller = app.controller "SearchCtrl", ($scope, $http, modalService) ->
 
-    $scope.results = resultsService
+    $scope.search =
+        term: ""
+        results: []
+    $scope.perform = ->
+       q = $scope.search.term.trim()
+       if q.length > 0
+           result = $http
+               method: "GET",
+               url: window.search_url,
+               params: "q": q
+           result.success (data) ->
+               $scope.search.results = data
+               return
+       else
+           $scope.search.results = []
+       return
+
     $scope.modal = modalService
+
     return
-
-
-controller.directive "codesearchSearch", ($http, resultsService) ->
-
-    (scope, element, attrs) ->
-
-        element.on "keyup", (event) ->
-
-            q = escape event.target.value.trim()
-            if q.length > 0
-                result = $http
-                    method: "GET",
-                    url: attrs.codesearchSearch,
-                    params: "q": q
-                result.success (data) ->
-                    resultsService.setResults data
-                    return
-            else
-                resultsService.setResults []
-            return
-        return
-
-
-controller.factory "resultsService", ->
-
-    _results = []
-
-    getResults: ->
-        return _results
-    setResults: (value) ->
-        _results = value
-        return
-
 
 controller.factory "modalService", ->
     href = "#"
