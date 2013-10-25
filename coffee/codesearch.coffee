@@ -6,19 +6,6 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
     $scope.search =
         term: ""
         results: []
-    $scope.perform = ->
-       q = escape $scope.search.term.trim()
-       if q.length > 0
-           result = $http
-               method: "GET",
-               url: window.search_url,
-               params: "q": q
-           result.success (data) ->
-               $scope.search.results = data
-               return
-       else
-           $scope.search.results = []
-       return
 
     $scope.modal =
         body: ""
@@ -26,6 +13,24 @@ controller = app.controller "SearchCtrl", ($scope, $http) ->
         url: "#"
 
     return
+
+
+controller.directive "codesearchQuery", ($http) ->
+    templateUrl: "query.html"
+    link: (scope, element, attrs) ->
+        scope.perform = ->
+          q = escape scope.search.term.trim()
+          if q.length > 0
+              result = $http
+                  method: "GET",
+                  url: attrs.codesearchQuery,
+                  params: "q": q
+              result.success (data) ->
+                  scope.search.results = data
+                  return
+          else
+              scope.search.results = []
+          return
 
 
 controller.directive "codesearchPopup", ($http) ->

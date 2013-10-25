@@ -16,7 +16,11 @@
 			<a data-ng-href="{{ '{{result.display_url}}' }}" data-ng-click="popup($event)">{{ '{{result.path}}' }}</a>
 		</script>
 
-		<p><input type="search" data-codesearch-search="{{ search_url }}" data-ng-model="search.term" data-ng-change="perform()"></p>
+		<script type="text/ng-template" id="query.html">
+			<input type="search" data-ng-model="search.term" data-ng-change="perform()">
+		</script>
+
+		<p data-codesearch-query="{{ search_url }}"></p>
 		<p>
 			<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
 		</p>
