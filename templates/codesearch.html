@@ -11,12 +11,12 @@
 {% block body %}
 			<div data-ng-app="CodeSearch" data-ng-controller="SearchCtrl">
 
-				<script type="text/ng-template" id="popup.html">
-					<a data-ng-href="{{ '{{result.display_url}}' }}" data-ng-click="popup($event)">{{ '{{result.path}}' }}</a>
-				</script>
-
 				<script type="text/ng-template" id="query.html">
 					<input type="search" data-ng-model="search.term" data-ng-change="perform()">
+				</script>
+
+				<script type="text/ng-template" id="popup.html">
+					<a data-ng-href="{{ '{{result.display_url}}' }}" data-ng-click="popup($event)">{{ '{{result.path}}' }}</a>
 				</script>
 
 				<p data-codesearch-query="{{ search_url }}"></p>
