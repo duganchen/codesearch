@@ -1,4 +1,4 @@
-app = angular.module "CodeSearch", ["ngSanitize"]
+app = angular.module "CodeSearch", ["ngSanitize", "ui.bootstrap"]
 
 
 controller = app.controller "SearchCtrl", ($scope, $http) ->
@@ -33,7 +33,7 @@ controller.directive "codesearchQuery", ($http) ->
           return
 
 
-controller.directive "codesearchPopup", ($http) ->
+controller.directive "codesearchPopup", ($http, $modal) ->
 
     templateUrl: "popup.html"
     link: (scope, element) ->
@@ -49,6 +49,8 @@ controller.directive "codesearchPopup", ($http) ->
                 scope.modal.title = data.title
                 scope.modal.body = data.body
                 scope.modal.url = data.url
-                $('#myModal').modal(show: true)
+                $modal.open
+                    templateUrl: "modal.html"
+                    scope: scope
                 return
             return

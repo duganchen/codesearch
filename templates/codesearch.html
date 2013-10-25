@@ -19,36 +19,31 @@
 					<a data-ng-href="{{ '{{result.display_url}}' }}" data-ng-click="popup($event)">{{ '{{result.path}}' }}</a>
 				</script>
 
+				<script type="text/ng-template" id="modal.html">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">{{ '{{modal.title}}' }}</h4>
+						<a id="link" data-ng-href="{{ '{{modal.url}}' }}">Link</a>
+					</div>
+					<div class="modal-body" data-ng-bind-html-unsafe="modal.body"></div>
+				</script>
+
 				<p data-codesearch-query="{{ search_url }}"></p>
 				<p>
 					<a href="http://sphinxsearch.com/docs/2.0.9/extended-syntax.html" target="_blank">Search Help</a>
 				</p>
 
-				<ul class="list-group" data-ng-repeat="result in search.results">
-					<li class="list-group-item ng-cloak" data-codesearch-popup></li>
+				<ul class="nav nav-list" data-ng-repeat="result in search.results">
+					<li class="ng-cloak" data-codesearch-popup></li>
 				</ul>
-
-				<!-- Modal -->
-				<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">{{ '{{modal.title}}' }}</h4>
-								<a id="link" data-ng-href="{{ '{{modal.url}}' }}">Link</a>
-							</div>
-							<div class="modal-body" data-ng-bind-html-unsafe="modal.body"></div>
-						</div><!-- /.modal-content -->
-					</div><!-- /.modal-dialog -->
-				</div><!-- /.modal -->
 
 			</div>
 {% endblock %}
 
 {% block js %}
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
-		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-sanitize.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
 		<script src="{{ url_for('static', filename='codesearch.js') }}"></script>
 {% endblock %}
