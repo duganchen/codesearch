@@ -38,8 +38,7 @@ controller.directive "codesearchPopup", ($http) ->
 
             result = $http
                 method: "GET"
-                url: $event.target.dataset.ajaxUrl
-
+                url: scope.result.ajax_url
 
             result.success (data) ->
                 scope.modal.title = data.title

@@ -13,7 +13,7 @@
 	<div data-ng-app="CodeSearch" data-ng-controller="SearchCtrl">
 
 		<script type="text/ng-template" id="popup.html">
-			<a data-ng-href="{{ '{{result.display_url}}' }}" data-ajax-url="{{ '{{result.ajax_url}}' }}" data-ng-click="popup($event)">{{ '{{result.path}}' }}</a>
+			<a data-ng-href="{{ '{{result.display_url}}' }}" data-ng-click="popup($event)">{{ '{{result.path}}' }}</a>
 		</script>
 
 		<p><input type="search" data-codesearch-search="{{ search_url }}" data-ng-model="search.term" data-ng-change="perform()"></p>
