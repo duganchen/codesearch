@@ -17,9 +17,9 @@ necessary and set it as your xmlpipe command:
 
 	index sourcecode
 	{
-		source				= sourcecode_pipe
-		path				= /var/data/sourcecode
-		charset_type		= utf-8
+		source			= sourcecode_pipe
+		path			= /var/data/sourcecode
+		charset_type	= utf-8
 	}
 
 Then run Sphinx's indexer:
