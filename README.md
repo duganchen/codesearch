@@ -10,8 +10,21 @@ necessary and set it as your xmlpipe command:
 
 	source sourcecode_pipe
 	{
-		type = xmlpipe2 xmlpipe_command = /path/to/indexfiles /path/to/repositories
+		type			= xmlpipe2
+		xmlpipe_command = /home/dugan/Documents/ember/tools/indexfiles /home/dugan/Documents
 	}
+
+
+	index sourcecode
+	{
+		source				= sourcecode_pipe
+		path				= /var/data/sourcecode
+		charset_type		= utf-8
+	}
+
+Then run Sphinx's indexer:
+
+	indexer -- all
 
 ## Search Page
 
