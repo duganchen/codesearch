@@ -37,7 +37,7 @@ First build the CoffeeScript:
 
 Then start it up:
 
-	./codesearch.py.
+	./codesearch.py
 
 ## Note
 
