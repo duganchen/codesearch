@@ -6,7 +6,7 @@ searching your source code repositories. It consists of an indexer and a search 
 ## Indexer
 
 *tools/indexfiles* will convert a directory to xmlpipe2-ready XML. Edit it as
-necessary and set it as your xmlpipe command:
+necessary. Then, in sphinx.conf, set it as your xmlpipe command:
 
 	source sourcecode_pipe
 	{
