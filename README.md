@@ -11,14 +11,14 @@ necessary. Then, in sphinx.conf, set it as your xmlpipe command:
 	source sourcecode_pipe
 	{
 		type			= xmlpipe2
-		xmlpipe_command = /path/to/codesearch/tools/indexfiles /home/dugan/Documents
+		xmlpipe_command = /path/to/codesearch/tools/indexfiles /path/to/repositories/
 	}
 
 
 	index sourcecode
 	{
 		source			= sourcecode_pipe
-		path			= /var/data/sourcecode
+		path			= /path/to/sphinx/indexes/sourcecode
 		charset_type	= utf-8
 	}
 
