@@ -11,7 +11,7 @@ necessary. Then, in sphinx.conf, set it as your xmlpipe command:
 	source sourcecode_pipe
 	{
 		type			= xmlpipe2
-		xmlpipe_command = /home/dugan/Documents/ember/tools/indexfiles /home/dugan/Documents
+		xmlpipe_command = /path/to/codesearch/tools/indexfiles /home/dugan/Documents
 	}
 
 
