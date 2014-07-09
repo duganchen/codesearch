@@ -31,6 +31,14 @@ Then run Sphinx's indexer:
 The rest is a Flask-based webapp with the client-side code written in
 CoffeeScript.
 
+First build the CoffeeScript:
+
+	cake build
+
+Then start it up:
+
+	./codesearch.py.
+
 ## Note
 
 Both the indexer and the search page assume that the Sphinx index is named
@@ -41,4 +49,4 @@ Both the indexer and the search page assume that the Sphinx index is named
 The favicon is from
 [favicon.cc](http://www.favicon.cc/?action=icon&file_id=661515)
 
-Other credits are in the comments, as appropriate.
+Other credits are in the comments.
