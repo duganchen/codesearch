@@ -24,7 +24,7 @@ necessary. Then, in sphinx.conf, set it as your xmlpipe command:
 
 Then run Sphinx's indexer:
 
-	indexer -- all
+	indexer --all
 
 ## Search Page
 
