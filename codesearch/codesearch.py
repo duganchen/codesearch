@@ -1,8 +1,4 @@
-#!/opt/Python-2.7.8-empty/bin/python
-
-import sys
-sys.path.insert(0, '/usr/people/dugan-c/dev/codesearchdev/codesearch/codesearch/dependencies/')
-sys.path.insert(0, '/usr/people/dugan-c/pygments/lib/python2.7/site-packages')
+#!/usr/bin/env python
 
 import collections
 import flask
