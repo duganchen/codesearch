@@ -1,3 +1,5 @@
 Flask
+GitPython
 Pygments
-sphinxit
+PyYAML
+oursql

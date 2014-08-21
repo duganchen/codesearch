@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+		<title>{{ title }}</title>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+		<link href="{{ url_for('static', filename='codesearch.css') }}" rel="stylesheet">
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+                    <h1>{{ title }}</h1>
+{% block body %}{% endblock %}
+				</div>
+			</div>
+		</div>
+{% block js %}{% endblock %}
+	</body>
+</html>

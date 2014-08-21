@@ -1,0 +1,51 @@
+{% extends "frame.html" %}
+
+{% block body %}
+					<form method="POST" action="{{ url_for('search_page') }}" autocomplete="off">
+						<p>
+							<input name="q" type="search" value="{{ term }}">
+							<button type="submit" class="btn btn-default">Search</button>
+							<img src="{{ url_for('static', filename='ajax-loader.gif') }}" id="loader" class="hidden">
+						</p>
+					</form>
+
+					<p>
+						<a href="http://sphinxsearch.com/docs/2.1.9/extended-syntax.html" target="_blank">Search Help</a>
+					</p>
+
+					{% if not results %}
+					<p><span class="help-block">Keywords: <em>url_for extended_syntax</em></span></p>
+					<p><span class="help-block">Phrase: <em>"this is cool"</em></span></p>
+					<p><span class="help-block">Extension: <em>oursql @ext .py</em></span></p>
+					<p><span class="help-block">Filename: <em>"int variable" @filename test.c</em></span></p>
+					<p><span class="help-block">Project: <em>sphinxit @project codesearch</em></span></p>
+					{% endif %}
+
+					{% if results %}
+					<ul class="nav nav-pills nav-stacked">
+						{% for result in results %}
+						<li>
+							<h2>{{ result.project}}</h2>
+							<ul>
+								{% for match in result.matches %}
+								<li>
+									<a href="{{ match.url}}" target="_blank">{{ match.path}}</a>
+									<ul>
+									{% for line in match.lines %}
+										<li>
+											<a href="{{ line.url }}" target="_blank">{{ line.number}}</a>: {{ line.line }}
+										</li>
+									{% endfor %}
+									</ul>
+								</li>
+								{% endfor %}
+							</ul>
+						</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+{% endblock %}
+
+{% block js %}
+		<script src="{{ url_for('static', filename='codesearch.js', version=1) }}"></script>
+{% endblock %}

@@ -1,0 +1,17 @@
+# Any file that matches one of these fnmatch patterns will be indexed.
+patterns:
+- Make*
+- '*.conf'
+- '*.cpp'
+- '*.ggl'
+- '*.h'
+- '*.js'
+- '*.mel'
+- '*.php'
+- '*.py'
+- '*.xml'
+- '*.yaml'
+
+# Regular expression to parse a project name from a path.
+# /path/to/codesearch.git will be parsed as codesearch.
+project_re: .*/(?P<project>[A-Za-z0-9_\-]+)(\.git)?$
