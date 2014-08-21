@@ -1,9 +1,7 @@
 # Any file that matches one of these fnmatch patterns will be indexed.
 patterns:
 - Make*
-- '*.conf'
 - '*.cpp'
-- '*.ggl'
 - '*.h'
 - '*.js'
 - '*.mel'
