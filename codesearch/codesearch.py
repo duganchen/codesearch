@@ -131,7 +131,8 @@ def display(sphinx_id):
     if sourcecode is None:
         flask.abort(404)
 
-    # This is the one of the slowest operations. Caching should probably be added here.
+    # Highlighting large files can be a slow operation. This is a candidate
+    # for caching.
 
     title = posixpath.join(sourcecode['project'], sourcecode['path'])
 
@@ -162,8 +163,8 @@ def get_matching_lines(url, text, term):
         if len(stripped) < 2000 and len(stripped) > 0 and term in line:
 
             # In this implementation, the #n hash doesn't do anything. You can
-            # use it if you're modifying Code Search # to # display results in
-            # rt though.
+            # use it if you're modifying Code Search to display results in
+            # something like RT though.
             line_url = '{}#n{}'.format(url, line_number)
             line = {'number': line_number, 'line': line, 'url': line_url}
             lines.append(line)
