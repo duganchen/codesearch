@@ -161,7 +161,7 @@ def get_matching_lines(url, text, term):
         stripped = line.strip()
         if len(stripped) < 2000 and len(stripped) > 0 and term in line:
 
-			# In this implementation, the #n hash doesn't do anything. You can
+            # In this implementation, the #n hash doesn't do anything. You can
             # use it if you're modifying Code Search # to # display results in
             # rt though.
             line_url = '{}#n{}'.format(url, line_number)
