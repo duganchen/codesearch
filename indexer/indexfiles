@@ -1,109 +1,175 @@
-#!/usr/bin/env python
+#!/opt/Python-2.7.8-empty/bin/python
 
-import argparse
+
+import collections
 import fnmatch
+import git
 import os
-from xml.etree import ElementTree
-from signal import signal, SIGPIPE, SIG_DFL
+import oursql
+import posixpath
 import re
-
-# Edit this, for the files you want to index.
-PATTERNS = ['*.js', '*.mel', '*.py', '*.yaml']
+from signal import signal, SIGPIPE, SIG_DFL
+import urlparse
+import yaml
+from xml.etree import ElementTree
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('docdir')
-    args = parser.parse_args()
 
     # http://stackoverflow.com/a/16865106/240515
     signal(SIGPIPE, SIG_DFL)
 
-    docdir = os.path.expanduser(args.docdir)
-    xml = get_xml(docdir)
-    print_xml(xml)
+    config, repos = get_configuration()
 
+    project_regex = re.compile(config.project_re)
 
-def print_xml(xml):
-    print '<?xml version="1.0" encoding="utf-8"?>'
-    print ElementTree.tostring(xml, encoding='utf-8')
+    xml_builder = XmlBuilder()
 
+    documents = Documents()
+    documents.clear()
 
-def get_xml(docdir):
-    docset = ElementTree.Element('sphinx:docset')
+    for repo_path in repos:
 
-    schema = ElementTree.SubElement(docset, 'sphinx:schema')
-    attr = ElementTree.SubElement(schema, 'sphinx:attr', name='path',
-                                  type='string')
-    field = ElementTree.SubElement(schema, 'sphinx:field', name='content')
+        repo = git.Repo(repo_path)
 
-    # Stop complaints about the identifier being unused. :)
-    assert attr is not None
-    assert field is not None
-
-    for i, filename in enumerate(iterfiles(docdir)):
-
-        with open(filename) as f:
-
-            body = f.read()
-            body = strip_control_characters(body)
+        for git_obj in repo.heads.master.commit.tree.traverse():
+            if git_obj.type != 'blob':
+                continue
+            if not is_indexed_type(config, git_obj):
+                continue
 
             try:
-                body = body.decode('utf-8')
+              text = git_obj.data_stream.read().decode('utf-8')
             except UnicodeDecodeError:
                 # Skip files with invalid UTF-8
                 continue
 
-            document = ElementTree.SubElement(docset, 'sphinx:document',
-                                              {'id': str(i + 1)})
-            path = ElementTree.SubElement(document, 'path')
-            path.text = filename
+            filename = os.path.basename(git_obj.path)
+            _, ext = os.path.splitext(git_obj.path)
 
-            content = ElementTree.SubElement(document, 'content')
-            cdata = u'<![CDATA[[{}]]>'.format(body)
-            content.text = cdata
+            project = project_regex.match(repo_path).group('project')
 
-    return docset
+            indexable = Indexable(ext=ext, filename=filename,
+                                  path=git_obj.path, project=project,text=text)
 
+            sphinx_id = xml_builder.append(indexable)
+            documents.insert(sphinx_id, indexable)
 
-def iterfiles(docdir):
-
-    docdir = os.path.expanduser(docdir)
-    for root, dirs, files in os.walk(docdir):
-        files = [f for f in files if not f[0] == '.']
-        dirs[:] = [d for d in dirs if not d[0] == '.']
-
-        for filename in filterfiles(files):
-            yield os.path.join(root, filename)
+    print xml_builder
 
 
-def filterfiles(filelist):
+def is_indexed_type(config, git_obj):
+    return any(fnmatch.fnmatch(git_obj.path, pattern) for pattern in
+               config.patterns)
 
-    files = set()
-    for pattern in PATTERNS:
-        for match in fnmatch.filter(filelist, pattern):
-            files.add(match)
-
-    return files
+Indexable = collections.namedtuple('Indexable',
+                                   ['ext', 'filename', 'path', 'project',
+                                    'text'])
+Config = collections.namedtuple('Config', ['patterns', 'project_re'])
 
 
-# http://chase-seibert.github.io/blog/2011/05/20/
-#     stripping-control-characters-in-python.html
-def strip_control_characters(text):
+def get_configuration():
 
-    # unicode invalid characters
-    RE_XML_ILLEGAL =\
-        u'([\u0000-\u0008\u000b-\u000c\u000e-\u001f\ufffe-\uffff])' + u'|' + \
-        u'([%s-%s][^%s-%s])|([^%s-%s][%s-%s])|([%s-%s]$)|(^[%s-%s])' % \
-        (unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
-         unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
-         unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),)
-    text = re.sub(RE_XML_ILLEGAL, "", text)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # ascii control characters
-    text = re.sub(r"[\x01-\x1F\x7F]", "", text)
+    repos_yaml = os.path.join(current_dir, 'repos.yaml')
 
-    return text
+    with open(repos_yaml) as f:
+        repos = yaml.load(f)
+
+    config_yaml = os.path.join(current_dir, 'config.yaml')
+
+    with open(config_yaml) as f:
+        config = yaml.load(f)
+
+    return Config(config['patterns'], config['project_re']), repos,
+
+
+class XmlBuilder(object):
+
+    def __init__(self):
+        self.__docset = ElementTree.Element('sphinx:docset')
+
+        schema = ElementTree.SubElement(self.__docset, 'sphinx:schema')
+        attr = ElementTree.SubElement(schema, 'sphinx:field', name='ext')
+        attr = ElementTree.SubElement(schema, 'sphinx:field', name='filename')
+        attr = ElementTree.SubElement(schema, 'sphinx:field', name='project')
+        field = ElementTree.SubElement(schema, 'sphinx:field', name='content')
+
+        # Stop complaints about the identifier being unused. :)
+        assert attr is not None
+        assert field is not None
+
+        self.__sphinx_id = 1
+
+    def append(self, indexable):
+
+        document = ElementTree.SubElement(self.__docset, 'sphinx:document',
+                                          {'id': str(self.__sphinx_id)})
+
+        ext = ElementTree.SubElement(document, 'ext')
+        ext.text = indexable.ext
+
+        filename = ElementTree.SubElement(document, 'filename')
+        filename.text = indexable.filename
+
+        path = ElementTree.SubElement(document, 'project')
+        path.text = indexable.project
+
+        content = ElementTree.SubElement(document, 'content')
+        stripped = self._strip_control_characters(indexable.text)
+        cdata = u'<![CDATA[[{}]]>'.format(stripped)
+        content.text = cdata
+
+        old_id = self.__sphinx_id
+        self.__sphinx_id += 1
+        return old_id
+
+    def __str__(self):
+
+        header = '<?xml version="1.0" encoding="utf-8"?>'
+        body = ElementTree.tostring(self.__docset, encoding='utf-8')
+        return '{}{}'.format(header, body)
+
+    @staticmethod
+    def _strip_control_characters(text):
+
+        # http://chase-seibert.github.io/blog/2011/05/20/
+        #     stripping-control-characters-in-python.html
+
+        # Unicode invalid characters
+        RE_XML_ILLEGAL =\
+            u'([\u0000-\u0008\u000b-\u000c\u000e-\u001f\ufffe-\uffff])' + \
+            u'|' + \
+            u'([%s-%s][^%s-%s])|([^%s-%s][%s-%s])|([%s-%s]$)|(^[%s-%s])' % \
+            (unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
+             unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
+             unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),)
+        text = re.sub(RE_XML_ILLEGAL, "", text)
+
+        # ASCII control characters
+        text = re.sub(r"[\x01-\x1F\x7F]", "", text)
+
+        return text
+
+
+class Documents(object):
+
+    def __init__(self):
+        self._conn = oursql.connect(user='codesearch', passwd='codesearch',
+                                    db='codesearch')
+
+    def insert(self, sphinx_id, indexable):
+        cursor = self._conn.cursor()
+        query = ''.join(['INSERT INTO documents (id, path, project, ',
+                         'text) VALUES (?, ?, ?, ?)'])
+        cursor.execute(query,
+           (sphinx_id, indexable.path, indexable.project, indexable.text))
+
+    def clear(self):
+        cursor = self._conn.cursor()
+        cursor.execute('DELETE FROM documents')
+
 
 if __name__ == '__main__':
     main()
