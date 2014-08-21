@@ -140,7 +140,7 @@ def display(sphinx_id):
         code = u'<pre>{}</pre>'.format(sourcecode['text'])
         return flask.render_template('display.html', title=title, code=code)
 
-    formatter = HtmlFormatter(noclasses=True)
+    formatter = HtmlFormatter()
 
     # Highlighting large files can be a slow operation. This is a candidate
     # for caching.
