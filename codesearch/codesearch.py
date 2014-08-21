@@ -131,9 +131,6 @@ def display(sphinx_id):
     if sourcecode is None:
         flask.abort(404)
 
-    # Highlighting large files can be a slow operation. This is a candidate
-    # for caching.
-
     title = posixpath.join(sourcecode['project'], sourcecode['path'])
 
     try:
@@ -144,7 +141,11 @@ def display(sphinx_id):
         return flask.render_template('display.html', title=title, code=code)
 
     formatter = HtmlFormatter(noclasses=True)
+
+    # Highlighting large files can be a slow operation. This is a candidate
+    # for caching.
     code = highlight(sourcecode['text'], lexer, formatter)
+
     return flask.render_template('display.html', title=title,
                                   code=code)
 
