@@ -29,11 +29,11 @@
 							<ul>
 								{% for match in result.matches %}
 								<li>
-									<a href="{{ match.url}}" target="_blank">{{ match.path}}</a>
+									<a href="{{ match.url }}" target="_blank">{{ match.path }}</a>
 									<ul>
 									{% for line in match.lines %}
 										<li>
-											<a href="{{ line.url }}" target="_blank">{{ line.number}}</a>: {{ line.line }}
+											<a href="{{ line.url }}" target="_blank">{{ line.number }}</a>: {{ line.line }}
 										</li>
 									{% endfor %}
 									</ul>
