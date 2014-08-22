@@ -49,7 +49,8 @@ def search_page():
     timestring = update_info['last_updated'].strftime('%Y-%m-%d %H:%M')
 
     return flask.render_template(
-        'codesearch.html', results=results, term=term, title="Code Search")
+        'codesearch.html', results=results, term=term, title="Code Search",
+		date=date, timestring=timestring)
 
 
 def search(term):
