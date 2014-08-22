@@ -4,7 +4,6 @@ import collections
 import flask
 import json
 import oursql
-import os
 import posixpath
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
@@ -12,7 +11,6 @@ from pygments.lexers import get_lexer_for_filename
 from pygments.util import ClassNotFound
 import re
 import urllib
-import yaml
 
 app = flask.Flask(__name__)
 
@@ -91,7 +89,6 @@ def search(term):
 
     for result in results:
 
-        url_path = posixpath.join(result['path'], str(result['id']))
         result['url'] = flask.url_for('display', sphinx_id=result['id'])
 
         text = result['text'].decode('utf-8')
@@ -147,12 +144,10 @@ def display(sphinx_id):
     code = highlight(sourcecode['text'], lexer, formatter)
 
     return flask.render_template('display.html', title=title,
-                                  code=code)
+                                 code=code)
 
 
 def get_matching_lines(url, text, term):
-
-    key = json.dumps(('matching-lines', url, term))
 
     lines = []
 
@@ -175,7 +170,7 @@ def get_matching_lines(url, text, term):
 
 def term_is_valid(term):
     # A search term cannot have mismatched quotation marks
-    return term.count('"') % 2 == 0;
+    return term.count('"') % 2 == 0
 
 
 def get_search_content(query, attribute_regex):
@@ -192,6 +187,7 @@ def get_search_content(query, attribute_regex):
 def has_filters(query, attribute_regex):
     return any(attribute_regex.match(x.strip()) for x in
                attribute_regex.split(query))
+
 
 if __name__ == '__main__':
     main()
