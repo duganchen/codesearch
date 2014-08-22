@@ -15,6 +15,10 @@ In *indexer*, copy *config.sample.yaml* to *config.yaml* and edit it as you see 
 For example, you might want to change the list of patterns that determine which files
 will be indexed.
 
+Edit *indexer/site_extensions.py* and override *get_project_name* if you custom code
+to translate an repo path to an actual project name. For example, some sites might need
+a database query to go from "/path/to/gitutils.git" to "GitUtils".
+
 ### Initializing The Repository List
 
 Create *indexer/repos.yaml*, containing a list of repositories you want indexed.
@@ -48,6 +52,14 @@ Then run Sphinx's indexer:
 	indexer --all
 
 ## Search Page
+
+### Initializing
+
+Customize *codesearch/site_extensions.py* as needed. By default, search results
+link to a built-in display page, but you can override that so that they link to
+an external source code repository instead. See *codesearch/site_extensions_github.py* for an example.
+
+### Starting
 
 The rest is a Flask-based webapp.
 
