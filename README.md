@@ -30,8 +30,7 @@ some sites might need a database query to go from "/path/to/gitutils.git" to
 
 ### Initializing the Repository List
 
-Create *indexer/repos.yaml*, containing a list of repositories you want
-indexed.  A file named *repos.py* has been provided to make it easier:
+Use the included *repos.py* to generate a list of repositories:
 
 	find /absolute_path/to/repositories/ -maxdepth 1 -type d | ./repos.py > repos.yaml
 
