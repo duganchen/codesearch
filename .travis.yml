@@ -4,4 +4,5 @@ python: '2.7'
 install:
 - pip install flake8 --use-mirrors
 
-script: flake8 codesearch/codesearch.py
+script:
+- flake8 .
