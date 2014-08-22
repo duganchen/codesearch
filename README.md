@@ -70,4 +70,6 @@ The favicon is from
 
 Other credits are in the comments.
 
+## Build Status
+
 [![Build Status](https://travis-ci.org/duganchen/codesearch.svg?branch=in-progress)](https://travis-ci.org/duganchen/codesearch)
