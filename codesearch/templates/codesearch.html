@@ -15,6 +15,9 @@
 					</form>
 
 					{% if not results %}
+
+                    <p>Last indexed: <time datetime="{{ timestring }}>{{ date }}</time></p>
+
 					<p>
 						<a href="http://sphinxsearch.com/docs/2.1.9/extended-syntax.html" target="_blank">Search Help</a>
 					</p>
@@ -24,6 +27,7 @@
 					<p><span class="help-block">Extension: <em>oursql @ext .py</em></span></p>
 					<p><span class="help-block">Filename: <em>"int variable" @filename test.c</em></span></p>
 					<p><span class="help-block">Project: <em>sphinxit @project codesearch</em></span></p>
+
 					{% endif %}
 
 					{% if results %}

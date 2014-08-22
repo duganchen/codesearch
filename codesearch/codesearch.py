@@ -2,6 +2,7 @@
 
 import collections
 import flask
+import os
 import oursql
 import posixpath
 from pygments import highlight
@@ -10,6 +11,7 @@ from pygments.lexers import get_lexer_for_filename
 from pygments.util import ClassNotFound
 import re
 import urllib
+import yaml
 
 app = flask.Flask(__name__)
 
@@ -37,6 +39,14 @@ def search_page():
     term = urllib.unquote_plus(flask.request.args.get('q', ''))
 
     results = search(term)
+
+    current_dir = os.path.dirname(os.path.abspath(os.path.join(__file__)))
+    update_info_file = os.path.join(current_dir, 'update_info.yaml')
+    with open(update_info_file) as f:
+        update_info = yaml.load(f)
+
+    date = update_info['last-updated'].strftime('%B %d')
+    timestring = update_info.strftime('%Y-%m-%d %H:%M')
 
     return flask.render_template(
         'codesearch.html', results=results, term=term, title="Code Search")
