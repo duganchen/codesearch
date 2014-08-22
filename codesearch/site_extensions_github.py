@@ -28,4 +28,4 @@ def get_line(line_number):
     hash fragment to link directly to that line.
     '''
 
-    return '#L{}'.format(line_number)
+    return 'L{}'.format(line_number)
