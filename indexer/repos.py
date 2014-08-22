@@ -11,7 +11,7 @@ find /path/to/repositories/ -maxdepth 1 -type d | ./repos.py > repos.yaml
 import git
 import os
 import re
-from site_extensions import NotProjectError, get_project_name
+from site_extensions import NotProjectError, get_project_name, site_action
 import sys
 import yaml
 
@@ -42,6 +42,8 @@ def main():
             project = get_project_name(abspath, repo_regex)
         except NotProjectError:
             continue
+
+        site_action(abspath, config, project_regex)
 
         repos.append({'abspath': abspath, 'project': project})
 

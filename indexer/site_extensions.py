@@ -21,5 +21,14 @@ def get_project_name(abspath, project_regex):
     return match.group('project')
 
 
+def site_action(abspath, config, project_regex):
+	'''
+	Perform any other action that may be needed for the site
+
+	The default action is a no-op.
+	'''
+	pass
+
+
 class NotProjectError(Exception):
     pass
