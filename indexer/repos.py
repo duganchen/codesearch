@@ -43,7 +43,7 @@ def main():
         except NotProjectError:
             continue
 
-        site_action(abspath, config, project_regex)
+        site_action(abspath, config, repo_regex)
 
         repos.append({'abspath': abspath, 'project': project})
 
