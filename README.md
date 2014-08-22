@@ -72,4 +72,4 @@ Other credits are in the comments.
 
 ## Build Status
 
-[![Build Status](https://travis-ci.org/duganchen/codesearch.svg?branch=in-progress)](https://travis-ci.org/duganchen/codesearch)
+[![Build Status](https://travis-ci.org/duganchen/codesearch.svg?branch=master)](https://travis-ci.org/duganchen/codesearch)

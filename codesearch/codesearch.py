@@ -13,7 +13,7 @@ import urllib
 
 app = flask.Flask(__name__)
 
-from site_extensions import get_url, get_line
+from site_extensions_github import get_url, get_line
 
 
 def main():
