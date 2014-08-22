@@ -13,6 +13,8 @@ import urllib
 
 app = flask.Flask(__name__)
 
+from site_extensions import get_url, get_line
+
 
 def main():
     app.debug = True
@@ -88,7 +90,7 @@ def search(term):
 
     for result in results:
 
-        result['url'] = flask.url_for('display', sphinx_id=result['id'])
+        result['url'] = get_url(result)
 
         text = result['text'].decode('utf-8')
 
@@ -157,10 +159,7 @@ def get_matching_lines(url, text, term):
         stripped = line.strip()
         if len(stripped) < 2000 and len(stripped) > 0 and term in line:
 
-            # In this implementation, the #n hash doesn't do anything. You can
-            # use it if you're modifying Code Search to display results in
-            # something like RT though.
-            line_url = '{}#n{}'.format(url, line_number)
+            line_url = '{}#{}'.format(url, get_line(line_number))
             line = {'number': line_number, 'line': line, 'url': line_url}
             lines.append(line)
 
