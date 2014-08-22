@@ -159,7 +159,7 @@ def display(sphinx_id):
 
     # Highlighting large files can be a slow operation. This is a candidate
     # for caching.
-    key = json.dumps(['HIGHLIGHT', zlib.adler32(sourcecode['text'])])
+    key = json.dumps(['HIGHLIGHT', zlib.adler32(sourcecode['text'].encode('utf-8'))])
     code = cache.get(key)
     if code is None:
         code = highlight(sourcecode['text'], lexer, formatter)
