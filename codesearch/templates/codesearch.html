@@ -14,11 +14,11 @@
 						</p>
 					</form>
 
+					{% if not results %}
 					<p>
 						<a href="http://sphinxsearch.com/docs/2.1.9/extended-syntax.html" target="_blank">Search Help</a>
 					</p>
 
-					{% if not results %}
 					<p><span class="help-block">Keywords: <em>url_for extended_syntax</em></span></p>
 					<p><span class="help-block">Phrase: <em>"this is cool"</em></span></p>
 					<p><span class="help-block">Extension: <em>oursql @ext .py</em></span></p>
