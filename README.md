@@ -6,8 +6,8 @@
 
 
 Code Search is a [Sphinx](http://sphinxsearch.com)-backed Intranet app for
-searching your source code repositories. It consists of an indexer and a search
-page.
+doing full-text searches of your git repositories. It consists of an indexer
+and a search page.
 
 ## The Database
 
@@ -54,7 +54,8 @@ sphinx.conf, set it as your xmlpipe command:
 		charset_type	= utf-8
 	}
 
-Then run Sphinx's indexer:
+Run Sphinx's indexer whenever an indexed branch (just master in this
+implementation), in any repository, is updated:
 
 	indexer --all --rotate
 
