@@ -1,5 +1,9 @@
 # Code Search
 
+![screenshot](https://raw.githubusercontent.com/duganchen/codesearch/master/screenshot.png)
+
+[![Build Status](https://travis-ci.org/duganchen/codesearch.svg?branch=master)](https://travis-ci.org/duganchen/codesearch)
+
 Code Search is a [Sphinx](http://sphinxsearch.com)-backed Intranet app for
 searching your source code repositories. It consists of an indexer and a search
 page.
@@ -86,7 +90,3 @@ The favicon is from
 [favicon.cc](http://www.favicon.cc/?action=icon&file_id=661515)
 
 Other credits are in the comments.
-
-## Build Status
-
-[![Build Status](https://travis-ci.org/duganchen/codesearch.svg?branch=master)](https://travis-ci.org/duganchen/codesearch)
