@@ -56,7 +56,7 @@ sphinx.conf, set it as your xmlpipe command:
 
 Then run Sphinx's indexer:
 
-	indexer --all
+	indexer --all --rotate
 
 ## The Search Page
 
