@@ -2,6 +2,7 @@
 
 import collections
 import flask
+import json
 import os
 import oursql
 import posixpath
@@ -12,10 +13,14 @@ from pygments.util import ClassNotFound
 import re
 import urllib
 import yaml
+import zlib
 
 app = flask.Flask(__name__)
 
 from site_extensions import get_url, get_line
+
+from werkzeug.contrib.cache import SimpleCache
+cache = SimpleCache()
 
 
 def main():
@@ -50,10 +55,11 @@ def search_page():
 
     return flask.render_template(
         'codesearch.html', results=results, term=term, title="Code Search",
-		date=date, timestring=timestring)
+        date=date, timestring=timestring)
 
 
 def search(term):
+
     if len(term) == 0:
         return []
 
@@ -153,13 +159,26 @@ def display(sphinx_id):
 
     # Highlighting large files can be a slow operation. This is a candidate
     # for caching.
-    code = highlight(sourcecode['text'], lexer, formatter)
+    key = json.dumps(['HIGHLIGHT', zlib.adler32(sourcecode['text'])])
+    code = cache.get(key)
+    if code is None:
+        code = highlight(sourcecode['text'], lexer, formatter)
+        cache.set(key, code)
 
     return flask.render_template('display.html', title=title,
                                  code=code)
 
 
 def get_matching_lines(url, text, term):
+
+    # Iterating through text in potentially very large files is another slow
+    # operation that we cache.
+
+    key = json.dumps([url, zlib.adler32(text), term])
+
+    lines = cache.get(key)
+    if lines is not None:
+        return lines
 
     lines = []
 
@@ -174,7 +193,9 @@ def get_matching_lines(url, text, term):
             line = {'number': line_number, 'line': line, 'url': line_url}
             lines.append(line)
 
-    return tuple(lines)
+    lines = tuple(lines)
+    cache.set(lines)
+    return lines
 
 
 def term_is_valid(term):
