@@ -2,7 +2,6 @@
 
 import collections
 import flask
-import json
 import oursql
 import posixpath
 from pygments import highlight
@@ -183,6 +182,7 @@ def get_search_content(query, attribute_regex):
         return parts[0]
 
     return ''
+
 
 def has_filters(query, attribute_regex):
     return any(attribute_regex.match(x.strip()) for x in
