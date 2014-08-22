@@ -71,8 +71,8 @@ Customize *codesearch/site_extensions.py* as needed. By default, search results
 link to a built-in display page, but you can override that so that they link to
 an external source code browser instead.
 
-See *codesearch/site_extensions_github.py* for an example that points results
-to GitHub.
+See *codesearch/site_extensions_github.py* for an example. It produces search
+results that link to GitHub.
 
 ### Starting the Search Page
 
