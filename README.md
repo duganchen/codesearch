@@ -15,7 +15,7 @@ An SQL file, *scripts/create_db.sql*, is provided to initialize MySQL.
 
 ## The Indexer
 
-### Initializing The Indexer
+### Initializing the Indexer
 
 In *indexer*, copy *config.sample.yaml* to *config.yaml* and edit it as you see
 fit. For example, you might want to change the list of fnmatch patterns that
@@ -26,7 +26,7 @@ custom code to translate an repo path to an actual project name. For example,
 some sites might need a database query to go from "/path/to/gitutils.git" to
 "GitUtils".
 
-### Initializing The Repository List
+### Initializing the Repository List
 
 Create *indexer/repos.yaml*, containing a list of repositories you want
 indexed.  A file named *repos.py* has been provided to make it easier:
@@ -35,7 +35,7 @@ indexed.  A file named *repos.py* has been provided to make it easier:
 
 Update repos.yaml whenever your list of repositories changes.
 
-### Indexing The Repositories
+### Indexing the Repositories
 
 *indexer/indexfiles* will convert a directory to Sphinx-ready XML. In
 sphinx.conf, set it as the xmlpipe command for an index named *sourcecode*:
@@ -63,7 +63,7 @@ implementation), in any repository, is updated:
 
 The rest is a Flask-based web application.
 
-### Customizing The Search Page
+### Customizing the Search Page
 
 Customize *codesearch/site_extensions.py* as needed. By default, search results
 link to a built-in display page, but you can override that so that they link to
@@ -72,7 +72,7 @@ an external source code browser instead.
 See *codesearch/site_extensions_github.py* for an example that points results
 to GitHub.
 
-### Starting The Search Page
+### Starting the Search Page
 
 Start it up:
 
