@@ -1,1 +1,3 @@
 *.pyc
+indexer/config.yaml
+indexer/repos.yaml

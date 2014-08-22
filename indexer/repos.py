@@ -11,8 +11,9 @@ find /path/to/repositories/ -maxdepth 1 -type d | ./repos.py > repos.yaml
 import git
 import os
 import re
-import yaml
+from site_extensions import NotProjectError, get_project_name
 import sys
+import yaml
 
 
 def main():
@@ -36,13 +37,13 @@ def main():
         except git.errors.InvalidGitRepositoryError:
             # The line is not a git repository. Skip it.
             continue
-        match = repo_regex.match(abspath)
-        if match is None:
+
+        try:
+            project = get_project_name(abspath, repo_regex)
+        except NotProjectError:
             continue
 
-        repo = match.group('project')
-
-        repos.append(repo)
+        repos.append({'abspath': abspath, 'project': project})
 
     print yaml.dump(repos, default_flow_style=False)
 

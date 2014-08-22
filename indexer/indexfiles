@@ -5,10 +5,8 @@ import fnmatch
 import git
 import os
 import oursql
-import posixpath
 import re
 from signal import signal, SIGPIPE, SIG_DFL
-import urlparse
 import yaml
 from xml.etree import ElementTree
 
@@ -20,25 +18,24 @@ def main():
 
     config, repos = get_configuration()
 
-    project_regex = re.compile(config.project_re)
-
     xml_builder = XmlBuilder()
 
     documents = Documents()
     documents.clear()
 
-    for repo_path in repos:
+    for repo_info in repos:
 
-        repo = git.Repo(repo_path)
+        repo = git.Repo(repo_info.abspath)
 
         for git_obj in repo.heads.master.commit.tree.traverse():
+
             if git_obj.type != 'blob':
                 continue
             if not is_indexed_type(config, git_obj):
                 continue
 
             try:
-              text = git_obj.data_stream.read().decode('utf-8')
+                text = git_obj.data_stream.read().decode('utf-8')
             except UnicodeDecodeError:
                 # Skip files with invalid UTF-8
                 continue
@@ -46,10 +43,9 @@ def main():
             filename = os.path.basename(git_obj.path)
             _, ext = os.path.splitext(git_obj.path)
 
-            project = project_regex.match(repo_path).group('project')
-
             indexable = Indexable(ext=ext, filename=filename,
-                                  path=git_obj.path, project=project,text=text)
+                                  path=git_obj.path, project=repo_info.project,
+                                  text=text)
 
             sphinx_id = xml_builder.append(indexable)
             documents.insert(sphinx_id, indexable)
@@ -61,6 +57,7 @@ def is_indexed_type(config, git_obj):
     return any(fnmatch.fnmatch(git_obj.path, pattern) for pattern in
                config.patterns)
 
+RepoInfo = collections.namedtuple('RepoInfo', ['abspath', 'project'])
 Indexable = collections.namedtuple('Indexable',
                                    ['ext', 'filename', 'path', 'project',
                                     'text'])
@@ -74,7 +71,7 @@ def get_configuration():
     repos_yaml = os.path.join(current_dir, 'repos.yaml')
 
     with open(repos_yaml) as f:
-        repos = yaml.load(f)
+        repos = [RepoInfo(**repo) for repo in yaml.load(f)]
 
     config_yaml = os.path.join(current_dir, 'config.yaml')
 
@@ -162,8 +159,9 @@ class Documents(object):
         cursor = self._conn.cursor()
         query = ''.join(['INSERT INTO documents (id, path, project, ',
                          'text) VALUES (?, ?, ?, ?)'])
-        cursor.execute(query,
-           (sphinx_id, indexable.path, indexable.project, indexable.text))
+        cursor.execute(
+            query,
+            (sphinx_id, indexable.path, indexable.project, indexable.text))
 
     def clear(self):
         cursor = self._conn.cursor()
