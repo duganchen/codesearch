@@ -9,7 +9,9 @@ Code Search is a [Sphinx](http://sphinxsearch.com)-backed Intranet app for
 doing full-text searches of your git repositories. It consists of an indexer
 and a search page.
 
-## The Database
+## The Database Backend
+
+The backend consists of both Sphinx and MySQL.
 
 An SQL file, *scripts/create_db.sql*, is provided to initialize MySQL.
 
