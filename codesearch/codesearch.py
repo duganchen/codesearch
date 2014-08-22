@@ -46,7 +46,7 @@ def search_page():
         update_info = yaml.load(f)
 
     date = update_info['last_updated'].strftime('%B %d')
-    timestring = update_info.strftime('%Y-%m-%d %H:%M')
+    timestring = update_info['last_updated'].strftime('%Y-%m-%d %H:%M')
 
     return flask.render_template(
         'codesearch.html', results=results, term=term, title="Code Search")
