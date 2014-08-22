@@ -38,7 +38,7 @@ Update repos.yaml whenever your list of repositories changes.
 ### Indexing The Repositories
 
 *indexer/indexfiles* will convert a directory to Sphinx-ready XML. In
-sphinx.conf, set it as your xmlpipe command:
+sphinx.conf, set it as the xmlpipe command for an index named *sourcecode*:
 
 	source sourcecode_pipe
 	{
