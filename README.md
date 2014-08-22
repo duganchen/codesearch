@@ -1,7 +1,8 @@
 # Code Search
 
 Code Search is a [Sphinx](http://sphinxsearch.com)-backed Intranet app for
-searching your source code repositories. It consists of an indexer and a search page.
+searching your source code repositories. It consists of an indexer and a search
+page.
 
 ## Database
 
@@ -11,18 +12,19 @@ An SQL file, *scripts/create_db.sql*, is provided to initialize MySQL.
 
 ### Initializing The Indexer
 
-In *indexer*, copy *config.sample.yaml* to *config.yaml* and edit it as you see fit.
-For example, you might want to change the list of patterns that determine which files
-will be indexed.
+In *indexer*, copy *config.sample.yaml* to *config.yaml* and edit it as you see
+fit.  For example, you might want to change the list of patterns that determine
+which files will be indexed.
 
-Edit *indexer/site_extensions.py* and override *get_project_name* if you custom code
-to translate an repo path to an actual project name. For example, some sites might need
-a database query to go from "/path/to/gitutils.git" to "GitUtils".
+Edit *indexer/site_extensions.py* and override *get_project_name* if you need
+custom code to translate an repo path to an actual project name. For example,
+some sites might need a database query to go from "/path/to/gitutils.git" to
+"GitUtils".
 
 ### Initializing The Repository List
 
-Create *indexer/repos.yaml*, containing a list of repositories you want indexed.
-A file named *repos.py* has been provided to make it easier:
+Create *indexer/repos.yaml*, containing a list of repositories you want
+indexed.  A file named *repos.py* has been provided to make it easier:
 
 	find /absolute_path/to/repositories/ -maxdepth 1 -type d | ./repos.py > repos.yaml
 
@@ -57,7 +59,10 @@ Then run Sphinx's indexer:
 
 Customize *codesearch/site_extensions.py* as needed. By default, search results
 link to a built-in display page, but you can override that so that they link to
-an external source code repository instead. See *codesearch/site_extensions_github.py* for an example.
+an external source code browser instead.
+
+See *codesearch/site_extensions_github.py* for an example that points results
+to GitHub.
 
 ### Starting
 
