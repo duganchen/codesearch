@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/duganchen/codesearch.svg?branch=in-progress)](https://travis-ci.org/duganchen/codesearch)
-
 # Code Search
 
 Code Search is a [Sphinx](http://sphinxsearch.com)-backed Intranet app for
