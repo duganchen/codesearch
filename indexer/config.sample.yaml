@@ -13,3 +13,6 @@ patterns:
 # Regular expression to parse a project name from a path.
 # /path/to/codesearch.git will be parsed as codesearch.
 project_re: .*/(?P<project>[A-Za-z0-9_\-]+)(\.git)?$
+
+# The path on disk to where the codesearch webapp is.
+codesearch_path: /path/to/codesearch
