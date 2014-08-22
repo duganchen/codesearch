@@ -11,7 +11,8 @@ find /path/to/repositories/ -maxdepth 1 -type d | ./repos.py > repos.yaml
 import git
 import os
 import re
-from site_extensions import NotProjectError, get_project_name, site_action
+from site_extensions import (NotProjectError, get_project_name, site_action,
+                             site_initial_action)
 import sys
 import yaml
 
@@ -21,6 +22,8 @@ def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(current_dir, 'config.yaml')) as f:
         config = yaml.load(f)
+
+    site_initial_action(config)
 
     repo_regex = re.compile(config['project_re'])
 

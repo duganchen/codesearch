@@ -21,13 +21,22 @@ def get_project_name(abspath, project_regex):
     return match.group('project')
 
 
+def site_initial_action(config):
+	'''
+	Perform any site-specific action that may be needed on initialization. The default is a no-op.
+	'''
+
+	assert config
+
 def site_action(abspath, config, project_regex):
 	'''
-	Perform any other action that may be needed for the site
+	Perform any other action that may be needed for the site, per project.
 
 	The default action is a no-op.
 	'''
-	pass
+	assert abspath
+	assert config
+	assert project_regex
 
 
 class NotProjectError(Exception):
