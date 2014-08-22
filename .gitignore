@@ -1,3 +1,4 @@
 *.pyc
 indexer/config.yaml
 indexer/repos.yaml
+codesearch/update_info.yaml
