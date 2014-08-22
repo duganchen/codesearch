@@ -174,7 +174,7 @@ def get_matching_lines(url, text, term):
     # Iterating through text in potentially very large files is another slow
     # operation that we cache.
 
-    key = json.dumps([url, zlib.adler32(text), term])
+    key = json.dumps([url, zlib.adler32(text.encode('utf-8')), term])
 
     lines = cache.get(key)
     if lines is not None:
