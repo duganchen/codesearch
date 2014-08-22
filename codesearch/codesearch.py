@@ -45,7 +45,7 @@ def search_page():
     with open(update_info_file) as f:
         update_info = yaml.load(f)
 
-    date = update_info['last-updated'].strftime('%B %d')
+    date = update_info['last_updated'].strftime('%B %d')
     timestring = update_info.strftime('%Y-%m-%d %H:%M')
 
     return flask.render_template(
