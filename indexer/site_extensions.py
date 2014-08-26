@@ -22,21 +22,23 @@ def get_project_name(abspath, project_regex):
 
 
 def site_initial_action(config):
-	'''
-	Perform any site-specific action that may be needed on initialization. The default is a no-op.
-	'''
+    '''
+    Perform any site-specific action that may be needed on initialization.
+    The default is a no-op.
+    '''
 
-	assert config
+    assert config
+
 
 def site_action(abspath, config, project_regex):
-	'''
-	Perform any other action that may be needed for the site, per project.
+    '''
+    Perform any other action that may be needed for the site, per project.
 
-	The default action is a no-op.
-	'''
-	assert abspath
-	assert config
-	assert project_regex
+    The default action is a no-op.
+    '''
+    assert abspath
+    assert config
+    assert project_regex
 
 
 class NotProjectError(Exception):
