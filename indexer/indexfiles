@@ -53,13 +53,14 @@ def main():
 
     update_info = os.path.join(config.codesearch_path, 'update_info.yaml')
     with open(update_info, 'w') as f:
-	    yaml.dump({'last_updated': datetime.datetime.now()}, f)
+        yaml.dump({'last_updated': datetime.datetime.now()}, f)
 
     print xml_builder
 
 
 def is_indexed_type(config, git_obj):
-    return any(fnmatch.fnmatch(git_obj.path, pattern) for pattern in
+    filename = os.path.basename(git_obj.path)
+    return any(fnmatch.fnmatch(filename, pattern) for pattern in
                config.patterns)
 
 RepoInfo = collections.namedtuple('RepoInfo', ['abspath', 'project'])
