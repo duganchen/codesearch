@@ -208,12 +208,16 @@ def get_search_content(query, attribute_regex):
     parts = tuple(x.strip() for x in attribute_regex.split(query) if x.strip())
 
     if '@content' in parts:
-        return parts[parts.index('@content') + 1]
+        search_content = parts[parts.index('@content') + 1]
+    elif not attribute_regex.match(parts[0]):
+        search_content = parts[0]
+    else:
+        search_content = ''
 
-    if not attribute_regex.match(parts[0]):
-        return parts[0]
+    if search_content.startswith('"') and search_content.endswith('"'):
+        search_content = search_content[1: -1]
 
-    return ''
+    return search_content
 
 
 def has_filters(query, attribute_regex):
