@@ -197,7 +197,7 @@ def get_matching_lines(url, text, term):
         # We skip very long lines, e.g. in minified js
         stripped = line.strip()
         if len(stripped) < 2000 and len(stripped) > 0:
-            if any(term in line for term in terms):
+            if any(term.lower() in line.lower() for term in terms):
                 line_url = '{}#{}'.format(url, get_line(line_number))
                 line = {'number': line_number, 'line': line, 'url': line_url}
                 lines.append(line)
