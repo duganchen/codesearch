@@ -202,7 +202,7 @@ def get_matching_lines(url, text, term):
             if term.startswith('"') and term.endswith('"') and term in line:
                 matched = True
             else:
-                terms = [t.strip() for t in term.split()]
+                terms = [t.strip() for t in term.split() if len(term.strip()) > 0]
                 tokens = [token.strip() for token in line.split()]
 
                 for token in tokens:
