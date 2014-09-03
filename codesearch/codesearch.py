@@ -189,7 +189,6 @@ def get_matching_lines(url, text, term):
         # We skip very long lines, e.g. in minified js
         stripped = line.strip()
 
-
         matched = False
 
         if len(stripped) < 2000 and len(stripped) > 0:
