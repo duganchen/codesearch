@@ -37,7 +37,7 @@ def main():
 
         try:
             git.Repo(abspath)
-        except git.errors.InvalidGitRepositoryError:
+        except git.exc.InvalidGitRepositoryError:
             # The line is not a git repository. Skip it.
             continue
 
