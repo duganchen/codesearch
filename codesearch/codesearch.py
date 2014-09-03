@@ -183,16 +183,24 @@ def get_matching_lines(url, text, term):
 
     lines = []
 
+    if term.startswith('"') and term.endswith('"'):
+        # "look a phrase"
+        terms = [term[1:-1]]
+    else:
+        # keyword1 =keyword2
+        terms = [t.strip() for t in term.split()]
+        terms = [term[1:] if term.startswith('=') else term for term in terms]
+
     line_number = 0
     for line in text.split('\n'):
         line_number += 1
         # We skip very long lines, e.g. in minified js
         stripped = line.strip()
-        if len(stripped) < 2000 and len(stripped) > 0 and term in line:
-
-            line_url = '{}#{}'.format(url, get_line(line_number))
-            line = {'number': line_number, 'line': line, 'url': line_url}
-            lines.append(line)
+        if len(stripped) < 2000 and len(stripped) > 0:
+            if any(term in line for term in terms):
+                line_url = '{}#{}'.format(url, get_line(line_number))
+                line = {'number': line_number, 'line': line, 'url': line_url}
+                lines.append(line)
 
     lines = tuple(lines)
     cache.set(lines)
@@ -208,14 +216,11 @@ def get_search_content(query, attribute_regex):
     parts = tuple(x.strip() for x in attribute_regex.split(query) if x.strip())
 
     if '@content' in parts:
-        search_content = parts[parts.index('@content') + 1]
-    elif not attribute_regex.match(parts[0]):
-        search_content = parts[0]
-    else:
+        return parts[parts.index('@content') + 1]
+    if not attribute_regex.match(parts[0]):
+        return parts[0]
+	return
         search_content = ''
-
-    if search_content.startswith('"') and search_content.endswith('"'):
-        search_content = search_content[1: -1]
 
     return search_content
 
