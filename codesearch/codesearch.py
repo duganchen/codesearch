@@ -183,14 +183,6 @@ def get_matching_lines(url, text, term):
 
     lines = []
 
-    # if term.startswith('"') and term.endswith('"'):
-    #     # "look a phrase"
-    #     terms = [term[1:-1]]
-    # else:
-    #     # keyword1 =keyword2
-    #     terms = [t.strip() for t in term.split()]
-    #     terms = [term[1:] if term.startswith('=') else term for term in terms]
-
     line_number = 0
     for line in text.split('\n'):
         line_number += 1
@@ -199,7 +191,7 @@ def get_matching_lines(url, text, term):
         if len(stripped) < 2000 and len(stripped) > 0:
 
             matched = False
-            if term.startswith('"') and term.endswith('"') and term in line:
+            if term.startswith('"') and term.endswith('"') and term.lower() in line.lower():
                 matched = True
             else:
                 terms = [t.strip() for t in term.split() if len(term.strip()) > 0]
@@ -207,9 +199,9 @@ def get_matching_lines(url, text, term):
 
                 for token in tokens:
                     for term in terms:
-                        if term.startswith('=') and term[1:] == token:
+                        if term.startswith('=') and term[1:].lower() == token.lower():
                             matched = True
-                        elif token.startswith(term):
+                        elif token.lower().startswith(term.lower()):
                             matched = True
 
             if matched:
