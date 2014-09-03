@@ -196,20 +196,20 @@ def get_matching_lines(url, text, term):
             if term.startswith('"') and term.endswith('"') and term.lower() in line.lower():
                 matched = True
             else:
-                terms = [t.strip() for t in term.split() if len(term.strip()) > 0]
-                tokens = [token.strip() for token in line.split()]
+                terms = [t.strip().lower() for t in term.split() if len(term.strip()) > 0]
+                tokens = [token.strip().lower() for token in line.split()]
 
                 for token in tokens:
                     for term in terms:
-                        if term.startswith('=') and term[1:].lower() == token.lower():
+                        if term.startswith('=') and term[1:] == token:
                             matched = True
-                        elif token.lower().startswith(term.lower()):
+                        elif token.startswith(term):
                             matched = True
 
-            if matched:
-                line_url = '{}#{}'.format(url, get_line(line_number))
-                line = {'number': line_number, 'line': line, 'url': line_url}
-                lines.append(line)
+        if matched:
+            line_url = '{}#{}'.format(url, get_line(line_number))
+            line = {'number': line_number, 'line': line, 'url': line_url}
+            lines.append(line)
 
     lines = tuple(lines)
     cache.set(lines)
