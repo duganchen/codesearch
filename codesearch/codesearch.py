@@ -183,13 +183,13 @@ def get_matching_lines(url, text, term):
 
     lines = []
 
-    if term.startswith('"') and term.endswith('"'):
-        # "look a phrase"
-        terms = [term[1:-1]]
-    else:
-        # keyword1 =keyword2
-        terms = [t.strip() for t in term.split()]
-        terms = [term[1:] if term.startswith('=') else term for term in terms]
+    # if term.startswith('"') and term.endswith('"'):
+    #     # "look a phrase"
+    #     terms = [term[1:-1]]
+    # else:
+    #     # keyword1 =keyword2
+    #     terms = [t.strip() for t in term.split()]
+    #     terms = [term[1:] if term.startswith('=') else term for term in terms]
 
     line_number = 0
     for line in text.split('\n'):
@@ -197,7 +197,22 @@ def get_matching_lines(url, text, term):
         # We skip very long lines, e.g. in minified js
         stripped = line.strip()
         if len(stripped) < 2000 and len(stripped) > 0:
-            if any(term.lower() in line.lower() for term in terms):
+
+            matched = False
+            if term.startswith('"') and term.endswith('"') and term in line:
+                matched = True
+            else:
+                terms = [t.strip() for t in term.split()]
+                tokens = [token.strip() for token in line.split()]
+
+                for token in tokens:
+                    for term in terms:
+                        if term.startswith('=') and term == token:
+                            matched = True
+                        elif token.startswith(term):
+                            matched = True
+
+            if matched:
                 line_url = '{}#{}'.format(url, get_line(line_number))
                 line = {'number': line_number, 'line': line, 'url': line_url}
                 lines.append(line)
@@ -219,10 +234,7 @@ def get_search_content(query, attribute_regex):
         return parts[parts.index('@content') + 1]
     if not attribute_regex.match(parts[0]):
         return parts[0]
-	return
-        search_content = ''
-
-    return search_content
+    return ''
 
 
 def has_filters(query, attribute_regex):
