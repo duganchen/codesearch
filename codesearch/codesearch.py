@@ -207,7 +207,7 @@ def get_matching_lines(url, text, term):
 
                 for token in tokens:
                     for term in terms:
-                        if term.startswith('=') and term == token:
+                        if term.startswith('=') and term[1:] == token:
                             matched = True
                         elif token.startswith(term):
                             matched = True
