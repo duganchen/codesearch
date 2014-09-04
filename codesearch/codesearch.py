@@ -204,7 +204,7 @@ def get_matching_lines(url, text, term):
                         if re.search(r'\b{0}\b'.format(term[1:]), line, re.IGNORECASE):
                             matched = True
                             break
-                    elif term in line:
+                    elif term.lower() in stripped.lower():
                         matched = True
                         break
 
