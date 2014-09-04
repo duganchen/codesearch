@@ -197,14 +197,16 @@ def get_matching_lines(url, text, term):
                 matched = True
             else:
                 terms = [t.strip().lower() for t in term.split() if len(term.strip()) > 0]
-                tokens = [token.strip().lower() for token in line.split()]
 
-                for token in tokens:
-                    for term in terms:
-                        if term.startswith('=') and term[1:] in token:
+                for term in terms:
+                    if term.startswith('='):
+                        if re.search(r'\b{0}\b'.format(term[1:]), line):
                             matched = True
-                        elif term in token:
-                            matched = True
+                    else:
+                        tokens = [token.strip().lower() for token in line.split()]
+                        for token in token:
+                             if term in token:
+                                 matched = True
 
         if matched:
             line_url = '{}#{}'.format(url, get_line(line_number))
