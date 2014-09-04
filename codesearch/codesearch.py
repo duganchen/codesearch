@@ -202,11 +202,10 @@ def get_matching_lines(url, text, term):
                     if term.startswith('='):
                         if re.search(r'\b{0}\b'.format(term[1:]), line, re.IGNORECASE):
                             matched = True
-                    else:
-                        tokens = [token.strip().lower() for token in line.split()]
-                        for token in token:
-                             if term in token:
-                                 matched = True
+                            break
+                    elif term in line:
+                        matched = True
+                        break
 
         if matched:
             line_url = '{}#{}'.format(url, get_line(line_number))
