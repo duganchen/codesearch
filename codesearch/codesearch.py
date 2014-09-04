@@ -193,8 +193,9 @@ def get_matching_lines(url, text, term):
 
         if len(stripped) < 2000 and len(stripped) > 0:
 
-            if term.startswith('"') and term.endswith('"') and term.lower() in line.lower():
-                matched = True
+            if term.startswith('"') and term.endswith('"'):
+                if term[1: -1].lower() in line.lower():
+                    matched = True
             else:
                 terms = [t.strip().lower() for t in term.split() if len(term.strip()) > 0]
 
