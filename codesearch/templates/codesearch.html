@@ -1,10 +1,5 @@
 {% extends "frame.html" %}
 
-{% block css %}
-		<link href="{{ url_for('static', filename='codesearch.css') }}" rel="stylesheet">
-{% endblock %}
-
-
 {% block body %}
 					<form method="POST" action="{{ url_for('search_page') }}" autocomplete="off">
 						<p>
