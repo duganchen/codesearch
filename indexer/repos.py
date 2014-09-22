@@ -36,12 +36,12 @@ def main():
             continue
 
         try:
-            git.Repo(abspath)
+            repo = git.Repo(abspath)
         except git.exc.InvalidGitRepositoryError:
             # The line is not a git repository. Skip it.
             continue
 
-        if not 'master' in repo.heads:
+        if 'master' not in repo.heads:
             continue
 
         try:
