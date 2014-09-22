@@ -41,6 +41,9 @@ def main():
             # The line is not a git repository. Skip it.
             continue
 
+        if not 'master' in repo.heads:
+            continue
+
         try:
             project = get_project_name(abspath, repo_regex)
         except NotProjectError:
