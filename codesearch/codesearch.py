@@ -63,7 +63,7 @@ def search(term):
     sphinx = oursql.connect(host='0', port=9306)
 
     connection_info = get_info('mysql_connection.yaml')
-    host = connection_info['mysql_port']
+    host = connection_info['mysql_host']
     db = oursql.connect(host=host, user='codesearch', passwd='codesearch',
                         db='codesearch')
 
@@ -134,7 +134,7 @@ def search(term):
 
 def get_info(filename):
     current_dir = os.path.dirname(os.path.abspath(os.path.join(__file__)))
-    update_info_file = os.path.join(current_dir, 'update_info.yaml')
+    update_info_file = os.path.join(current_dir, filename)
     with open(update_info_file) as f:
         return yaml.load(f)
 
@@ -220,7 +220,7 @@ def get_matching_lines(url, text, term):
             lines.append(line)
 
     lines = tuple(lines)
-    cache.set(lines)
+    cache.set(key, lines)
     return lines
 
 
