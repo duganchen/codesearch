@@ -45,10 +45,7 @@ def search_page():
 
     results = search(term)
 
-    current_dir = os.path.dirname(os.path.abspath(os.path.join(__file__)))
-    update_info_file = os.path.join(current_dir, 'update_info.yaml')
-    with open(update_info_file) as f:
-        update_info = yaml.load(f)
+    update_info = get_info('update_info.yaml')
 
     date = update_info['last_updated'].strftime('%B %d')
     timestring = update_info['last_updated'].strftime('%Y-%m-%d %H:%M')
@@ -63,9 +60,11 @@ def search(term):
     if len(term) == 0:
         return []
 
-    sphinx = oursql.connect(host='0',  port=9306)
+    sphinx = oursql.connect(host='0', port=9306)
 
-    db = oursql.connect(user='codesearch', passwd='codesearch',
+    connection_info = get_info('mysql_connection.yaml')
+    host = connection_info['mysql_port']
+    db = oursql.connect(host=host, user='codesearch', passwd='codesearch',
                         db='codesearch')
 
     # The smallest searchable term is 3 characters.
@@ -131,6 +130,13 @@ def search(term):
         sorted_groups.append(group)
 
     return sorted_groups
+
+
+def get_info(filename):
+    current_dir = os.path.dirname(os.path.abspath(os.path.join(__file__)))
+    update_info_file = os.path.join(current_dir, 'update_info.yaml')
+    with open(update_info_file) as f:
+        return yaml.load(f)
 
 
 @app.route('/display/<int:sphinx_id>')
