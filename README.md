@@ -68,6 +68,9 @@ The rest is a Flask-based web application.
 
 ### Customizing the Search Page
 
+In *codesearch/*, copy *config.sample.yaml* to *config.yaml* and change the
+mysql_host parameter  if you need to.
+
 Customize *codesearch/site_extensions.py* as needed. By default, search results
 link to a built-in display page, but you can override that so that they link to
 an external source code browser instead.
