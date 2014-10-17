@@ -13,7 +13,9 @@ and a search page.
 
 The backend consists of both Sphinx and MySQL.
 
-An SQL file, *scripts/create_db.sql*, is provided to initialize MySQL.
+An SQL file, *scripts/create_db.sql*, is provided to initialize MySQL. If you
+read through it, you'll see that it connects to mysql @localhost, so run it on
+the host the MySQL is deployed on.
 
 ## The Indexer
 
