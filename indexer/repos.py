@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+#!/opt/Python-2.7.8-empty/bin/python
+import sys
+sys.path.insert(0, '/opt/codesearch_local_root/dependencies')
 
 '''
 Generates the repos.yaml file used by the indexer.
