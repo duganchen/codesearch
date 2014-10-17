@@ -23,7 +23,7 @@ def main():
 
     xml_builder = XmlBuilder()
 
-    documents = Documents()
+    documents = Documents(config)
     documents.clear()
 
     for repo_info in repos:
