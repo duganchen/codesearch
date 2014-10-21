@@ -11,7 +11,7 @@ and a search page.
 
 ## The Database Backend
 
-The backend consists of both Sphinx and MySQL.
+The backend consists of both Sphinx (tested with 2.1.9) and MySQL.
 
 An SQL file, *scripts/create_db.sql*, is provided to initialize MySQL. If you
 read through it, you'll see that it connects to mysql @localhost, so run it on
