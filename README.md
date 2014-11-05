@@ -11,9 +11,11 @@ and a search page.
 
 ## The Database Backend
 
-The backend consists of both Sphinx and MySQL.
+The backend consists of both Sphinx (tested with 2.1.9) and MySQL.
 
-An SQL file, *scripts/create_db.sql*, is provided to initialize MySQL.
+An SQL file, *scripts/create_db.sql*, is provided to initialize MySQL. If you
+read through it, you'll see that it connects to mysql @localhost, so run it on
+the host the MySQL is deployed on.
 
 ## The Indexer
 
@@ -65,6 +67,9 @@ implementation), in any repository, is updated:
 The rest is a Flask-based web application.
 
 ### Customizing the Search Page
+
+In *codesearch/*, copy *config.sample.yaml* to *config.yaml* and change the
+mysql_host parameter  if you need to.
 
 Customize *codesearch/site_extensions.py* as needed. By default, search results
 link to a built-in display page, but you can override that so that they link to

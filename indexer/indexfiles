@@ -21,7 +21,7 @@ def main():
 
     xml_builder = XmlBuilder()
 
-    documents = Documents()
+    documents = Documents(config)
     documents.clear()
 
     for repo_info in repos:
@@ -68,7 +68,7 @@ Indexable = collections.namedtuple('Indexable',
                                    ['ext', 'filename', 'path', 'project',
                                     'text'])
 Config = collections.namedtuple('Config',
-                                ['codesearch_path', 'patterns', 'project_re'])
+                                ['codesearch_path', 'mysql_host', 'patterns', 'project_re'])
 
 
 def get_configuration():
@@ -167,8 +167,8 @@ class XmlBuilder(object):
 
 class Documents(object):
 
-    def __init__(self):
-        self._conn = oursql.connect(user='codesearch', passwd='codesearch',
+    def __init__(self, config):
+        self._conn = oursql.connect(host=config.mysql_host, user='codesearch', passwd='codesearch',
                                     db='codesearch')
 
     def insert(self, sphinx_id, indexable):

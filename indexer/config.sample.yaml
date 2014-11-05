@@ -16,3 +16,6 @@ project_re: .*/(?P<project>[A-Za-z0-9_\-]+)(\.git)?$
 
 # The path on disk to where the codesearch webapp is.
 codesearch_path: /path/to/codesearch
+
+# The host that has the MySQL "codesearch" database.
+mysql_host: localhost
