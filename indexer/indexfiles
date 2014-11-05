@@ -148,10 +148,19 @@ class XmlBuilder(object):
             (unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
              unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
              unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),)
-        text = re.sub(RE_XML_ILLEGAL, "", text)
+
+        # We replace with a space, and not with an empty string, because these
+        # control characters inclue line breaking characters. We don't want
+        # want the following:
+        #    import a
+        #    import b
+        # to become
+        #    import aimportb
+
+        text = re.sub(RE_XML_ILLEGAL, " ", text)
 
         # ASCII control characters
-        text = re.sub(r"[\x01-\x1F\x7F]", "", text)
+        text = re.sub(r"[\x01-\x1F\x7F]", " ", text)
 
         return text
 
