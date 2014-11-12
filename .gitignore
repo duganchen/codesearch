@@ -1,5 +1,5 @@
 *.pyc
-indexer/config.yaml
+config.yaml
 indexer/repos.yaml
 codesearch/update_info.yaml
 repo_urls.yaml

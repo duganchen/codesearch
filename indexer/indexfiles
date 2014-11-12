@@ -68,7 +68,7 @@ Indexable = collections.namedtuple('Indexable',
                                    ['ext', 'filename', 'path', 'project',
                                     'text'])
 Config = collections.namedtuple('Config',
-                                ['codesearch_path', 'mysql_host', 'patterns', 'project_re'])
+                                ['codesearch_path', 'mysql', 'patterns', 'project_re'])
 
 
 def get_configuration():
@@ -150,12 +150,12 @@ class XmlBuilder(object):
              unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),)
 
         # We replace with a space, and not with an empty string, because these
-        # control characters inclue line breaking characters. We don't want
+        # control characters include line breaking characters. We don't want
         # want the following:
         #    import a
         #    import b
         # to become
-        #    import aimportb
+        #    import aimport b
 
         text = re.sub(RE_XML_ILLEGAL, " ", text)
 
@@ -168,8 +168,11 @@ class XmlBuilder(object):
 class Documents(object):
 
     def __init__(self, config):
-        self._conn = oursql.connect(host=config.mysql_host, user='codesearch', passwd='codesearch',
-                                    db='codesearch')
+        mysql = config.mysql
+        for key, value in mysql.items():
+            if value is None:
+                del mysql[key]
+        self._conn = oursql.connect(**mysql)
 
     def insert(self, sphinx_id, indexable):
         cursor = self._conn.cursor()

@@ -1,3 +1,15 @@
+# The path on disk to where the codesearch webapp is.
+codesearch_path: /path/to/codesearch
+
+# The connection settings for the MySQL database.
+# A null value means "does not need to be specified."
+mysql:
+  host: localhost
+  passwd: codesearch
+  port: null
+  user: codesearch
+  db: codesearch
+
 # Any file that matches one of these fnmatch patterns will be indexed.
 patterns:
 - Make*
@@ -13,9 +25,3 @@ patterns:
 # Regular expression to parse a project name from a path.
 # /path/to/codesearch.git will be parsed as codesearch.
 project_re: .*/(?P<project>[A-Za-z0-9_\-]+)(\.git)?$
-
-# The path on disk to where the codesearch webapp is.
-codesearch_path: /path/to/codesearch
-
-# The host that has the MySQL "codesearch" database.
-mysql_host: localhost

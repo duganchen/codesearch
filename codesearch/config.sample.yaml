@@ -1,0 +1,14 @@
+# null means "does not need to be specified"
+
+mysql:
+  db: codesearch
+  host: localhost
+  passwd: codesearch
+  port: null
+  user: codesearch
+sphinx:
+  db: null
+  host: '0'
+  passwd: null
+  port: 9306
+  user: null

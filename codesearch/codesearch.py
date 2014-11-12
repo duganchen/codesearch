@@ -60,12 +60,15 @@ def search(term):
     if len(term) == 0:
         return []
 
-    sphinx = oursql.connect(host='0', port=9306)
+    connection_info = get_info('config.yaml')
 
-    connection_info = get_info('mysql_connection.yaml')
-    host = connection_info['mysql_host']
-    db = oursql.connect(host=host, user='codesearch', passwd='codesearch',
-                        db='codesearch')
+    for db_settings in connection_info.itervalues():
+        for key, value in db_settings.items():
+            if value is None:
+                del db_settings[key]
+
+    sphinx = oursql.connect(**connection_info['sphinx'])
+    db = oursql.connect(**connection_info['mysql'])
 
     # The smallest searchable term is 3 characters.
     if len(term) < 3:
@@ -165,7 +168,7 @@ def display(sphinx_id):
 
     # Highlighting large files can be a slow operation. This is a candidate
     # for caching.
-    checksum = zlib.adler32(sourcecode['text'].encode('utf-8'))
+    checksum = zlib.adler32(sourcecode['text'])
     key = json.dumps(['HIGHLIGHT', checksum])
     code = cache.get(key)
     if code is None:
