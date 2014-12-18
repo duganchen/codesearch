@@ -8,7 +8,7 @@ import os
 import oursql
 import re
 from signal import signal, SIGPIPE, SIG_DFL
-from site_extensions import is_indexable_line
+from indexer_site_extensions import is_indexable_line
 import yaml
 from xml.etree import ElementTree
 

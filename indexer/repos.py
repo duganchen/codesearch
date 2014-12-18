@@ -11,8 +11,9 @@ find /path/to/repositories/ -maxdepth 1 -type d | ./repos.py > repos.yaml
 import git
 import os
 import re
-from site_extensions import (NotProjectError, get_project_name, site_action,
-                             site_initial_action)
+from repos_site_extensions import (
+    NotProjectError, get_project_name, site_action, site_initial_action
+)
 import sys
 import yaml
 
