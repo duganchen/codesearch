@@ -8,6 +8,7 @@ import os
 import oursql
 import re
 from signal import signal, SIGPIPE, SIG_DFL
+from site_extensions import is_indexable_line
 import yaml
 from xml.etree import ElementTree
 
@@ -40,6 +41,11 @@ def main():
             except UnicodeDecodeError:
                 # Skip files with invalid UTF-8
                 continue
+
+            # Skip lines that are not to be indexed
+            text = '\n'.join([
+                line for line in text.splitlines() if is_indexable_line(line)
+            ])
 
             filename = os.path.basename(git_obj.path)
             _, ext = os.path.splitext(git_obj.path)
