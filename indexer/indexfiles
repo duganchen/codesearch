@@ -8,9 +8,9 @@ import os
 import oursql
 import re
 from signal import signal, SIGPIPE, SIG_DFL
-from indexer_site_extensions import is_indexable_line
+from indexer_site_extensions import is_indexable_file, is_indexable_line
+from xml.sax.saxutils import escape
 import yaml
-from xml.etree import ElementTree
 
 
 def main():
@@ -20,10 +20,20 @@ def main():
 
     config, repos = get_configuration()
 
-    xml_builder = XmlBuilder()
-
     documents = Documents(config)
     documents.clear()
+
+    sphinx_id = 1
+
+    print u'<?xml version="1.0" encoding="utf-8"?>'
+    print u'<sphinx:docset>'
+
+    print u'<sphinx:schema>'
+    print u'<sphinx:field name="ext"/>'
+    print u'<sphinx:field name="filename"/>'
+    print u'<sphinx:field name="project"/>'
+    print u'<sphinx:field name="content"/>'
+    print u'</sphinx:schema>'
 
     for repo_info in repos:
 
@@ -34,6 +44,9 @@ def main():
             if git_obj.type != 'blob':
                 continue
             if not is_indexed_type(config, git_obj):
+                continue
+
+            if not is_indexable_file(git_obj.abspath):
                 continue
 
             try:
@@ -54,14 +67,24 @@ def main():
                                   path=git_obj.path, project=repo_info.project,
                                   text=text)
 
-            sphinx_id = xml_builder.append(indexable)
+            print u'<sphinx:document id="{}">'.format(sphinx_id)
+            print u'<ext>{}</ext>'.format(indexable.ext)
+            print u'<filename>{}</filename>'.format(indexable.filename)
+            print u'<project>{}</project>'.format(indexable.project)
+            print u'<content>'
+            print u'<![CDATA[['
+            content = escape(_strip_control_characters(indexable.text))
+            print content.encode('utf-8')
+            print u']]>'
+            print u'</content>'
+            print u'</sphinx:document>'
+
             documents.insert(sphinx_id, indexable)
+            sphinx_id += 1
 
     update_info = os.path.join(config.codesearch_path, 'update_info.yaml')
     with open(update_info, 'w') as f:
         yaml.dump({'last_updated': datetime.datetime.now()}, f)
-
-    print xml_builder
 
 
 def is_indexed_type(config, git_obj):
@@ -94,81 +117,34 @@ def get_configuration():
     return Config(**config), repos,
 
 
-class XmlBuilder(object):
+def _strip_control_characters(text):
 
-    def __init__(self):
-        self.__docset = ElementTree.Element('sphinx:docset')
+    # http://chase-seibert.github.io/blog/2011/05/20/
+    #     stripping-control-characters-in-python.html
 
-        schema = ElementTree.SubElement(self.__docset, 'sphinx:schema')
-        attr = ElementTree.SubElement(schema, 'sphinx:field', name='ext')
-        attr = ElementTree.SubElement(schema, 'sphinx:field', name='filename')
-        attr = ElementTree.SubElement(schema, 'sphinx:field', name='project')
-        field = ElementTree.SubElement(schema, 'sphinx:field', name='content')
+    # Unicode invalid characters
+    RE_XML_ILLEGAL =\
+        u'([\u0000-\u0008\u000b-\u000c\u000e-\u001f\ufffe-\uffff])' + \
+        u'|' + \
+        u'([%s-%s][^%s-%s])|([^%s-%s][%s-%s])|([%s-%s]$)|(^[%s-%s])' % \
+        (unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
+         unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
+         unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),)
 
-        # Stop complaints about the identifier being unused. :)
-        assert attr is not None
-        assert field is not None
+    # We replace with a space, and not with an empty string, because these
+    # control characters include line breaking characters. We don't want
+    # want the following:
+    #    import a
+    #    import b
+    # to become
+    #    import aimport b
 
-        self.__sphinx_id = 1
+    text = re.sub(RE_XML_ILLEGAL, " ", text)
 
-    def append(self, indexable):
+    # ASCII control characters
+    text = re.sub(r"[\x01-\x1F\x7F]", " ", text)
 
-        document = ElementTree.SubElement(self.__docset, 'sphinx:document',
-                                          {'id': str(self.__sphinx_id)})
-
-        ext = ElementTree.SubElement(document, 'ext')
-        ext.text = indexable.ext
-
-        filename = ElementTree.SubElement(document, 'filename')
-        filename.text = indexable.filename
-
-        path = ElementTree.SubElement(document, 'project')
-        path.text = indexable.project
-
-        content = ElementTree.SubElement(document, 'content')
-        stripped = self._strip_control_characters(indexable.text)
-        cdata = u'<![CDATA[[{}]]>'.format(stripped)
-        content.text = cdata
-
-        old_id = self.__sphinx_id
-        self.__sphinx_id += 1
-        return old_id
-
-    def __str__(self):
-
-        header = '<?xml version="1.0" encoding="utf-8"?>'
-        body = ElementTree.tostring(self.__docset, encoding='utf-8')
-        return '{}{}'.format(header, body)
-
-    @staticmethod
-    def _strip_control_characters(text):
-
-        # http://chase-seibert.github.io/blog/2011/05/20/
-        #     stripping-control-characters-in-python.html
-
-        # Unicode invalid characters
-        RE_XML_ILLEGAL =\
-            u'([\u0000-\u0008\u000b-\u000c\u000e-\u001f\ufffe-\uffff])' + \
-            u'|' + \
-            u'([%s-%s][^%s-%s])|([^%s-%s][%s-%s])|([%s-%s]$)|(^[%s-%s])' % \
-            (unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
-             unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),
-             unichr(0xd800), unichr(0xdbff), unichr(0xdc00), unichr(0xdfff),)
-
-        # We replace with a space, and not with an empty string, because these
-        # control characters include line breaking characters. We don't want
-        # want the following:
-        #    import a
-        #    import b
-        # to become
-        #    import aimport b
-
-        text = re.sub(RE_XML_ILLEGAL, " ", text)
-
-        # ASCII control characters
-        text = re.sub(r"[\x01-\x1F\x7F]", " ", text)
-
-        return text
+    return text
 
 
 class Documents(object):
