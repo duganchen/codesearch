@@ -46,7 +46,7 @@ def main():
             if not is_indexed_type(config, git_obj):
                 continue
 
-            if not is_indexable_file(git_obj.abspath):
+            if not is_indexable_file(git_obj.path):
                 continue
 
             try:
