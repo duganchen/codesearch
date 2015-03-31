@@ -8,7 +8,7 @@ import os
 import oursql
 import re
 from signal import signal, SIGPIPE, SIG_DFL
-from indexer_site_extensions import is_indexable_file, is_indexable_line
+from indexer_site_extensions import is_indexable_line
 from xml.sax.saxutils import escape
 import yaml
 
@@ -43,10 +43,17 @@ def main():
 
             if git_obj.type != 'blob':
                 continue
-            if not is_indexed_type(config, git_obj):
+
+            if is_blacklisted_type(config, git_obj):
                 continue
 
-            if not is_indexable_file(git_obj.path):
+            # A potentially expensive operation. For now, I'm going to let you use the above line to filter out the
+            # large, obviously-not-to-be-indexed files instead of trying to optimize this.
+            text = git_obj.data_stream.read()
+
+            # Skip binary files. See the following discussion on this implementation:
+            # http://stackoverflow.com/a/3002505
+            if '\0' in text:
                 continue
 
             try:
@@ -87,7 +94,7 @@ def main():
         yaml.dump({'last_updated': datetime.datetime.now()}, f)
 
 
-def is_indexed_type(config, git_obj):
+def is_blacklisted_type(config, git_obj):
     filename = os.path.basename(git_obj.path)
     return any(fnmatch.fnmatch(filename, pattern) for pattern in
                config.patterns)
