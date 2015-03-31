@@ -47,14 +47,8 @@ def main():
             if is_blacklisted_type(config, git_obj):
                 continue
 
-            # The intent is to index all text files and omit all binary files. This is a simple and efficient method,
-            # and I'm currently experimenting to see if it's accurate enough.
-            if 'text' not in git_obj.mime_type:
+            if is_binary(git_obj):
                 continue
-
-            # A potentially expensive operation. For now, I'm going to let you use the above line to filter out the
-            # large, obviously-not-to-be-indexed files instead of trying to optimize this.
-            text = git_obj.data_stream.read()
 
             try:
                 text = git_obj.data_stream.read().decode('utf-8')
@@ -174,6 +168,13 @@ class Documents(object):
     def clear(self):
         cursor = self._conn.cursor()
         cursor.execute('DELETE FROM documents')
+
+
+def is_binary(blob):
+
+    data = blob.data_stream.read(8000)
+    blob.data_stream[3].seek(0)
+    return '\0' in data
 
 
 if __name__ == '__main__':
