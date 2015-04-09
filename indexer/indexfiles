@@ -59,8 +59,13 @@ def main():
             if not is_short_lines(git_obj):
                 continue
 
+            text = git_obj.data_stream.read()
+
+            if not text:
+                continue
+
             try:
-                text = git_obj.data_stream.read().decode('utf-8')
+                text = text.decode('utf-8')
             except UnicodeDecodeError:
                 # Skip files with invalid UTF-8
                 continue
