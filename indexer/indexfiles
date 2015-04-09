@@ -56,6 +56,9 @@ def main():
             if is_binary(git_obj):
                 continue
 
+            if not is_short_lines(git_obj):
+                continue
+
             try:
                 text = git_obj.data_stream.read().decode('utf-8')
             except UnicodeDecodeError:
@@ -181,6 +184,13 @@ def is_binary(blob):
     data = blob.data_stream.read(8000)
     blob.data_stream[3].seek(0)
     return '\0' in data
+
+
+def is_short_lines(blob):
+
+    text = blob.data_stream.read(1000)
+    blob.data_stream[3].seek(0)
+    return len(text) < 1000 or '\n' in text
 
 
 if __name__ == '__main__':

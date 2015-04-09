@@ -12,7 +12,7 @@ mysql:
 
 # Any file that matches one of these fnmatch patterns will not be indexed.
 blacklist:
-- '*.min.js'
+- '.*'
 
 # Regular expression to parse a project name from a path.
 # /path/to/codesearch.git will be parsed as codesearch.
