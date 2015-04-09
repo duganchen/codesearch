@@ -206,11 +206,17 @@ def get_matching_lines(url, text, term):
                 if term[1: -1].lower() in line.lower():
                     matched = True
             else:
-                terms = [t.strip().lower() for t in term.split() if len(term.strip()) > 0]
+                terms = [
+                    t.strip().lower() for t in term.split()
+                    if len(term.strip()) > 0
+                ]
 
                 for term in terms:
                     if term.startswith('='):
-                        if re.search(r'\b{0}\b'.format(term[1:]), line, re.IGNORECASE):
+                        in_line = re.search(
+                            r'\b{0}\b'.format(term[1:]), line, re.IGNORECASE
+                        )
+                        if in_line:
                             matched = True
                             break
                     elif term.lower() in stripped.lower():
