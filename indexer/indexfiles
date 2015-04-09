@@ -44,6 +44,12 @@ def main():
             if git_obj.type != 'blob':
                 continue
 
+            # The other two possible blob modes are 33188 for a normal
+            # file and 33261 for an executable file.
+            symbolic_link = 40960
+            if git_obj.mode == symbolic_link:
+                continue
+
             if is_blacklisted_type(config, git_obj):
                 continue
 
