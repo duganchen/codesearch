@@ -91,14 +91,14 @@ def main():
 def is_blacklisted_type(config, git_obj):
     filename = os.path.basename(git_obj.path)
     return any(fnmatch.fnmatch(filename, pattern) for pattern in
-               config.patterns)
+               config.blacklist)
 
 RepoInfo = collections.namedtuple('RepoInfo', ['abspath', 'project'])
 Indexable = collections.namedtuple('Indexable',
                                    ['ext', 'filename', 'path', 'project',
                                     'text'])
 Config = collections.namedtuple('Config',
-                                ['codesearch_path', 'mysql', 'patterns', 'project_re'])
+                                ['blacklist', 'codesearch_path', 'mysql', 'project_re'])
 
 
 def get_configuration():
