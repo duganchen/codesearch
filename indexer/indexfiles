@@ -87,7 +87,7 @@ def main():
             print u'<filename>{}</filename>'.format(indexable.filename)
             print u'<project>{}</project>'.format(indexable.project)
             print u'<content>'
-            print u'<![CDATA[['
+            print u'<![CDATA['
             content = escape(_strip_control_characters(indexable.text))
             print content.encode('utf-8')
             print u']]>'
